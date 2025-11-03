@@ -1,0 +1,30 @@
+@model IEnumerable<TrabalhoElvis2.Models.Imovel>
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Imóveis</h2>
+<div style="margin-bottom:12px;">
+    <a class="btn btn-primary" href="/Imovel/Cadastrar">+ Novo Imóvel</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Bloco</th><th>Número</th><th>Metragem</th><th>Condômino</th><th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Bloco</td>
+            <td>@i.Numero</td>
+            <td>@i.Metragem</td>
+            <td>@i.Condomino?.NomeCompleto</td>
+            <td>
+                <a class="btn btn-primary" href="/Imovel/Editar/@i.Id">Editar</a>
+                <form method="post" action="/Imovel/Excluir/@i.Id" style="display:inline;">
+                    <button class="btn btn-secondary" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

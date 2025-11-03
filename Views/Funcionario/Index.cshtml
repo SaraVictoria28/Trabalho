@@ -1,0 +1,31 @@
+@model IEnumerable<TrabalhoElvis2.Models.Funcionario>
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Funcionários</h2>
+<div style="margin-bottom:12px;">
+    <a class="btn btn-primary" href="/Funcionario/Cadastrar">+ Novo Funcionário</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th><th>Cargo</th><th>Telefone</th><th>Email</th><th>Admissão</th><th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var f in Model)
+    {
+        <tr>
+            <td>@f.Nome</td>
+            <td>@f.Cargo</td>
+            <td>@f.Telefone</td>
+            <td>@f.Email</td>
+            <td>@f.DataContratacao.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a class="btn btn-primary" href="/Funcionario/Editar/@f.Id">Editar</a>
+                <form method="post" action="/Funcionario/Excluir/@f.Id" style="display:inline;">
+                    <button class="btn btn-secondary" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

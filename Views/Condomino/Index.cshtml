@@ -1,0 +1,31 @@
+@model IEnumerable<TrabalhoElvis2.Models.Condomino>
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Condôminos</h2>
+<div style="margin-bottom:12px;">
+    <a class="btn btn-primary" href="/Condomino/Cadastrar">+ Novo Condômino</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th><th>CPF</th><th>Email</th><th>Tipo</th><th>Contrato</th><th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.NomeCompleto</td>
+            <td>@c.Cpf</td>
+            <td>@c.Email</td>
+            <td>@c.Tipo</td>
+            <td>@c.DataContrato.ToString("dd/MM/yyyy")</td>
+            <td>
+                <a class="btn btn-primary" href="/Condomino/Editar/@c.Id">Editar</a>
+                <form method="post" action="/Condomino/Excluir/@c.Id" style="display:inline;">
+                    <button class="btn btn-secondary" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

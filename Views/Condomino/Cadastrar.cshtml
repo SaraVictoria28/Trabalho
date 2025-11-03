@@ -1,0 +1,45 @@
+@model TrabalhoElvis2.Models.Condomino
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Novo Condômino</h2>
+<form asp-action="Cadastrar" method="post">
+    <div class="form-group">
+        <label asp-for="NomeCompleto"></label>
+        <input asp-for="NomeCompleto" class="form-control" />
+        <span class="text-danger" asp-validation-for="NomeCompleto"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Cpf"></label>
+        <input asp-for="Cpf" class="form-control" />
+        <span class="text-danger" asp-validation-for="Cpf"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefone"></label>
+        <input asp-for="Telefone" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Tipo"></label>
+        <select asp-for="Tipo" class="form-control">
+            <option>Proprietário</option>
+            <option>Locatário</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Tipo"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DataContrato"></label>
+        <input asp-for="DataContrato" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Observacoes"></label>
+        <input asp-for="Observacoes" class="form-control" />
+    </div>
+    <div class="text-center mt-3">
+        <button class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="/Condomino">Voltar</a>
+    </div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

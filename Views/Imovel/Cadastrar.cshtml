@@ -1,0 +1,35 @@
+@model TrabalhoElvis2.Models.Imovel
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Novo Imóvel</h2>
+<form asp-action="Cadastrar" method="post">
+    <div class="form-group">
+        <label asp-for="Bloco"></label>
+        <input asp-for="Bloco" class="form-control" />
+        <span class="text-danger" asp-validation-for="Bloco"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Numero"></label>
+        <input asp-for="Numero" class="form-control" />
+        <span class="text-danger" asp-validation-for="Numero"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Metragem"></label>
+        <input asp-for="Metragem" class="form-control" />
+        <span class="text-danger" asp-validation-for="Metragem"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CondominoId">Condômino</label>
+        <select asp-for="CondominoId" class="form-control" asp-items="ViewBag.Condominos">
+            <option value="">(sem vínculo)</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Observacao"></label>
+        <input asp-for="Observacao" class="form-control" />
+    </div>
+    <div class="text-center mt-3">
+        <button class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="/Imovel">Voltar</a>
+    </div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

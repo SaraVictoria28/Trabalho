@@ -1,0 +1,32 @@
+@model TrabalhoElvis2.Models.Funcionario
+<link rel="stylesheet" href="~/css/usuario.css" />
+<h2>Novo Funcionário</h2>
+<form asp-action="Cadastrar" method="post">
+    <div class="form-group">
+        <label asp-for="Nome"></label>
+        <input asp-for="Nome" class="form-control" />
+        <span class="text-danger" asp-validation-for="Nome"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Cargo"></label>
+        <input asp-for="Cargo" class="form-control" />
+        <span class="text-danger" asp-validation-for="Cargo"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Telefone"></label>
+        <input asp-for="Telefone" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="DataContratacao"></label>
+        <input asp-for="DataContratacao" type="date" class="form-control" />
+    </div>
+    <div class="text-center mt-3">
+        <button class="btn btn-primary">Salvar</button>
+        <a class="btn btn-secondary" href="/Funcionario">Voltar</a>
+    </div>
+</form>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
