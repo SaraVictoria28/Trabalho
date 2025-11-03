@@ -3,7 +3,7 @@ using TrabalhoElvis2.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configura conexão com o banco de dados SQL Server
+// Configura a conexão com o banco SQL Server
 builder.Services.AddDbContext<LoginContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao"))
 );

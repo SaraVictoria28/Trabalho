@@ -1,11 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-
 using System.Globalization;
 using System.Text;
 using TrabalhoElvis2.Context;
 using TrabalhoElvis2.Models;
 
-namespace TrabalhoElvis.Controllers
+namespace TrabalhoElvis2.Controllers
 {
     public class UsuarioController : Controller
     {
@@ -16,52 +15,53 @@ namespace TrabalhoElvis.Controllers
             _context = context;
         }
 
-        // --- CADASTRO ---
+        // --- GET: CADASTRAR ---
         public IActionResult Cadastrar()
         {
             return View();
         }
 
-       [HttpPost]
-public IActionResult Cadastrar(Usuario usuario)
-{
-    // Verifica se todos os campos obrigatórios foram preenchidos corretamente
-    if (ModelState.IsValid)
-    {
-        try
+        // --- POST: CADASTRAR ---
+        [HttpPost]
+        public IActionResult Cadastrar(Usuario usuario)
         {
-            // Adiciona o usuário ao banco
-            _context.Usuarios.Add(usuario);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Usuarios.Add(usuario);
+                    int registros = _context.SaveChanges();
 
-            // Salva as alterações no banco
-            int registros = _context.SaveChanges();
+                    Console.WriteLine($"✅ Usuário cadastrado com sucesso! Registros: {registros}");
+                    TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
 
-            // Log no console para depuração
-            Console.WriteLine($"✅ Usuário cadastrado com sucesso! Registros salvos: {registros}");
-            Console.WriteLine($"📧 Email: {usuario.Email} | Tipo: {usuario.TipoUsuario}");
+                    return RedirectToAction("Login", "Usuario");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Erro ao salvar: {ex.Message}");
+                    ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
+                }
+            }
+            else
+            {
+                foreach (var erro in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"⚠️ Erro: {erro.ErrorMessage}");
+                }
+            }
 
-            // Mensagem de sucesso temporária (para o Login)
-            TempData["MensagemSucesso"] = "Cadastro realizado com sucesso! Faça login para continuar.";
-
-            // Redireciona para a tela de login
-            return RedirectToAction("Login", "Usuario");
+            return View(usuario);
         }
-        catch (Exception ex)
+
+        // --- GET: LOGIN ---
+        [HttpGet]
+        public IActionResult Login()
         {
-            // Se der algum erro no banco, mostra no console
-            Console.WriteLine($"❌ Erro ao salvar no banco: {ex.Message}");
-            ModelState.AddModelError("", "Erro ao salvar o usuário no banco de dados.");
+            return View();
         }
-    }
-    else
-    {
-        Console.WriteLine("⚠️ ModelState inválido (algum campo obrigatório está vazio).");
-    }
 
-    // Se algo deu errado, retorna pra view com os dados digitados
-    return View(usuario);
-}
-
+        // --- POST: LOGIN ---
         [HttpPost]
         public IActionResult Login(string email, string senha, string tipoUsuario)
         {
@@ -71,7 +71,6 @@ public IActionResult Cadastrar(Usuario usuario)
                 return View();
             }
 
-            // 🔹 Função para normalizar acentuação e letras
             string Normalizar(string texto)
             {
                 return new string(texto
@@ -82,8 +81,6 @@ public IActionResult Cadastrar(Usuario usuario)
             }
 
             string tipoNormalizado = Normalizar(tipoUsuario);
-
-            // 🔹 Carrega todos os usuários na memória antes do filtro (para poder usar Normalizar)
             var usuarios = _context.Usuarios.ToList();
 
             var usuario = usuarios.FirstOrDefault(u =>
@@ -105,7 +102,7 @@ public IActionResult Cadastrar(Usuario usuario)
             return RedirectToAction("Interface");
         }
 
-        // --- INTERFACE PRINCIPAL ---
+        // --- INTERFACE ---
         public IActionResult Interface()
         {
             var tipo = TempData["TipoUsuario"]?.ToString();
@@ -119,19 +116,11 @@ public IActionResult Cadastrar(Usuario usuario)
             switch (tipo)
             {
                 case "Administrador":
-                    bool temCondominio = _context.Condominios.Any(c => c.AdminUsuarioId == id);
-
-                    if (temCondominio)
-                        return RedirectToAction("Dashboard", "Condominio", new { adminId = id });
-                    else
-                        return RedirectToAction("Cadastrar", "Condominio", new { adminId = id });
-
+                    return View("InterfaceAdministrador");
                 case "Síndico":
                     return View("InterfaceSindico");
-
                 case "Morador":
                     return View("InterfaceMorador");
-
                 default:
                     return RedirectToAction("Login");
             }

@@ -9,53 +9,54 @@
 
 <form asp-action="Cadastrar" asp-controller="Usuario" method="post" style="max-width:600px; margin:auto;">
     <div class="form-group">
-        <label>Tipo de Usuário</label>
-        <select id="tipoUsuario" name="TipoUsuario" class="form-control" required>
+        <label asp-for="TipoUsuario"></label>
+        <select asp-for="TipoUsuario" class="form-control" required>
             <option value="">Selecione...</option>
             <option value="Administrador">Administrador</option>
             <option value="Síndico">Síndico</option>
             <option value="Morador">Morador</option>
         </select>
+        <span asp-validation-for="TipoUsuario" class="text-danger"></span>
     </div>
 
     <div class="form-group mt-3">
-        <label>Email</label>
+        <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" placeholder="seu@email.com" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
     <div class="form-group mt-3">
-        <label>Senha</label>
+        <label asp-for="Senha"></label>
         <input asp-for="Senha" class="form-control" type="password" placeholder="Digite uma senha" />
         <span asp-validation-for="Senha" class="text-danger"></span>
     </div>
 
-    <!-- Campos de Administrador -->
+    <!-- Campos Administrador -->
     <div id="camposAdmin" style="display:none;">
         <h4 class="mt-4 text-primary">Informações do Administrador</h4>
         <div class="form-group">
-            <label>Nome do Administrador</label>
+            <label asp-for="NomeAdministrador"></label>
             <input asp-for="NomeAdministrador" class="form-control" />
         </div>
         <div class="form-group">
-            <label>Nome do Condomínio</label>
+            <label asp-for="NomeCondominio"></label>
             <input asp-for="NomeCondominio" class="form-control" />
         </div>
         <div class="form-group">
-            <label>CNPJ</label>
+            <label asp-for="Cnpj"></label>
             <input asp-for="Cnpj" class="form-control" />
         </div>
     </div>
 
-    <!-- Campos de Morador -->
+    <!-- Campos Morador -->
     <div id="camposMorador" style="display:none;">
         <h4 class="mt-4 text-primary">Informações do Morador</h4>
         <div class="form-group">
-            <label>Nome Completo</label>
+            <label asp-for="NomeCompleto"></label>
             <input asp-for="NomeCompleto" class="form-control" />
         </div>
         <div class="form-group">
-            <label>Apartamento</label>
+            <label asp-for="Apartamento"></label>
             <input asp-for="Apartamento" class="form-control" />
         </div>
     </div>
@@ -67,8 +68,9 @@
 </form>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script>
-        const tipoSelect = document.getElementById("tipoUsuario");
+        const tipoSelect = document.getElementById("TipoUsuario");
         const camposAdmin = document.getElementById("camposAdmin");
         const camposMorador = document.getElementById("camposMorador");
 
