@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251105023018_dadosba")]
+    partial class dadosba
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,17 +33,18 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CondominoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DataInicio")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DataTermino")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ImovelId")
-                        .HasColumnType("int");
+                    b.Property<string>("Imovel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Locatario")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NumeroContrato")
                         .IsRequired()
@@ -54,10 +58,6 @@ namespace TrabalhoElvis2.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CondominoId");
-
-                    b.HasIndex("ImovelId");
 
                     b.ToTable("Contratos");
                 });
@@ -109,16 +109,12 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("CPF")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Cargo")
+                    b.Property<string>("Cpf")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("FimLocacao")
@@ -131,14 +127,14 @@ namespace TrabalhoElvis2.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Observacoes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Telefone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tipo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Turno")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("ValorAluguel")
@@ -268,23 +264,6 @@ namespace TrabalhoElvis2.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("Trabalho.Models.Contrato", b =>
-                {
-                    b.HasOne("TrabalhoElvis2.Models.Condomino", "Condomino")
-                        .WithMany()
-                        .HasForeignKey("CondominoId");
-
-                    b.HasOne("TrabalhoElvis2.Models.Imovel", "Imovel")
-                        .WithMany()
-                        .HasForeignKey("ImovelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Condomino");
-
-                    b.Navigation("Imovel");
-                });
-
             modelBuilder.Entity("TrabalhoElvis2.Models.Condominio", b =>
                 {
                     b.HasOne("TrabalhoElvis2.Models.Usuario", "Admin")
@@ -299,10 +278,15 @@ namespace TrabalhoElvis2.Migrations
             modelBuilder.Entity("TrabalhoElvis2.Models.Imovel", b =>
                 {
                     b.HasOne("TrabalhoElvis2.Models.Condomino", "Condomino")
-                        .WithMany()
+                        .WithMany("Imoveis")
                         .HasForeignKey("CondominoId");
 
                     b.Navigation("Condomino");
+                });
+
+            modelBuilder.Entity("TrabalhoElvis2.Models.Condomino", b =>
+                {
+                    b.Navigation("Imoveis");
                 });
 #pragma warning restore 612, 618
         }

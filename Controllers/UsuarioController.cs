@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using TrabalhoElvis2.Context;
 using TrabalhoElvis2.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace TrabalhoElvis2.Controllers
 {
@@ -31,9 +32,10 @@ namespace TrabalhoElvis2.Controllers
                     _context.SaveChanges();
 
                     // Guarda o tipo de usuário e ID pra redirecionar
-                    TempData["TipoUsuario"] = usuario.TipoUsuario;
-                    TempData["Nome"] = usuario.NomeAdministrador ?? usuario.NomeCompleto;
-                    TempData["IdUsuario"] = usuario.Id;
+                    HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+                    HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
+                    HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
+
 
                     // Redireciona direto pra interface correspondente
                     switch (usuario.TipoUsuario)
@@ -53,7 +55,7 @@ namespace TrabalhoElvis2.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ Erro ao salvar: {ex.Message}");
+                    Console.WriteLine($"Erro ao salvar: {ex.Message}");
                     ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
                 }
             }
@@ -61,7 +63,7 @@ namespace TrabalhoElvis2.Controllers
             {
                 foreach (var erro in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    Console.WriteLine($"⚠️ Erro: {erro.ErrorMessage}");
+                    Console.WriteLine($"Erro: {erro.ErrorMessage}");
                 }
             }
 
@@ -84,7 +86,6 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
-            // Normaliza texto (remove acentos e deixa minúsculo)
             string Normalizar(string texto)
             {
                 return new string(texto
@@ -109,10 +110,10 @@ namespace TrabalhoElvis2.Controllers
                 return View();
             }
 
-            // Guarda informações para uso posterior
-            TempData["TipoUsuario"] = usuario.TipoUsuario;
-            TempData["Nome"] = usuario.NomeAdministrador ?? usuario.NomeCompleto;
-            TempData["IdUsuario"] = usuario.Id;
+            //  Guarda na sessão
+            HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+            HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
+            HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
 
             // === Redirecionamento por tipo de usuário ===
             switch (usuario.TipoUsuario)
@@ -127,6 +128,7 @@ namespace TrabalhoElvis2.Controllers
                     return RedirectToAction("Login");
             }
         }
+
 
 
         // --- INTERFACE ---
@@ -156,7 +158,44 @@ namespace TrabalhoElvis2.Controllers
         // --- LOGOUT ---
         public IActionResult Logout()
         {
+            HttpContext.Session.Clear();
             return RedirectToAction("Login");
         }
+
+        public IActionResult InterfaceMorador()
+        {
+            // Garante que só moradores acessem
+            var tipo = HttpContext.Session.GetString("TipoUsuario");
+            if (tipo != "Morador")
+            {
+                TempData["MensagemErro"] = "Acesso restrito a moradores.";
+                return RedirectToAction("Login");
+            }
+
+            // Recupera informações do usuário logado
+            ViewBag.NomeUsuario = HttpContext.Session.GetString("NomeUsuario");
+            ViewBag.IdUsuario = HttpContext.Session.GetInt32("IdUsuario");
+
+            return View();
+        }
+
+        public IActionResult InterfaceSindico()
+        {
+            // Permite apenas acesso do síndico
+            var tipo = HttpContext.Session.GetString("TipoUsuario");
+            if (tipo != "Síndico")
+            {
+                TempData["MensagemErro"] = "Acesso restrito a síndicos.";
+                return RedirectToAction("Login");
+            }
+
+            // Envia dados do usuário logado para a View
+            ViewBag.NomeUsuario = HttpContext.Session.GetString("NomeUsuario");
+            ViewBag.IdUsuario = HttpContext.Session.GetInt32("IdUsuario");
+
+            return View();
+        }
+
     }
 }
+

@@ -1,0 +1,110 @@
+@model IEnumerable<Trabalho.Models.Contrato>
+@{
+    ViewData["Title"] = "Contratos de Aluguel";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+
+<div class="container mt-4">
+    <h2>Contratos de Aluguel</h2>
+    <p class="text-muted">Gestão de contratos e locações</p>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoContratoModal">
+            <i class="bi bi-plus-lg"></i> Novo Contrato
+        </button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Número</th>
+                <th>Imóvel</th>
+                <th>Locatário</th>
+                <th>Período</th>
+                <th>Valor</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.NumeroContrato</td>
+                    <td>@item.Imovel</td>
+                    <td>@item.Condomino</td>
+                    <td>@item.DataInicio.ToShortDateString() até @item.DataTermino.ToShortDateString()</td>
+                    <td>R$ @item.Valor.ToString("N2")</td>
+                    <td>@item.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- MODAL: Novo Contrato -->
+<div class="modal fade" id="novoContratoModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cadastrar Novo Contrato</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Cadastrar" method="post">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label>Número do Contrato</label>
+                            <input type="text" name="NumeroContrato" class="form-control" required />
+                        </div>
+
+                        <div class="col">
+                            <label>Imóvel</label>
+                            <select name="ImovelId" class="form-select" required>
+                                <option value="">Selecione um imóvel...</option>
+                                @foreach (var imovel in ViewBag.Imoveis)
+                                {
+                                    <option value="@imovel.Id">@imovel.Codigo - @imovel.Tipo (@imovel.Metragem m²)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label>Condômino</label>
+                            <select name="CondominoId" class="form-select">
+                                <option value="">Selecione um condômino...</option>
+                                @foreach (var c in ViewBag.Condominos)
+                                {
+                                    <option value="@c.Id">@c.NomeCompleto - @c.Email</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col">
+                            <label>Valor do Aluguel</label>
+                            <input type="number" step="0.01" name="Valor" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label>Data de Início</label>
+                            <input type="date" name="DataInicio" class="form-control" />
+                        </div>
+                        <div class="col">
+                            <label>Data de Término</label>
+                            <input type="date" name="DataTermino" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

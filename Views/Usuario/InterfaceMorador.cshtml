@@ -1,3 +1,36 @@
-<h2 style="color:#4682b4;">Bem-vindo, Morador!</h2>
-<p>Aqui você pode ver avisos, reservas e informações do seu condomínio.</p>
-<a href="/Usuario/Login" class="btn btn-danger">Sair</a>
+@{
+    ViewData["Title"] = "Área do Morador";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-primary mb-4">
+        <i class="fa-solid fa-user"></i> Bem-vindo, @ViewBag.NomeUsuario!
+    </h2>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Minhas Reservas</h5>
+                <p class="text-muted mb-2">Gerencie suas reservas de áreas comuns</p>
+                <a href="#" class="btn btn-outline-primary btn-sm">Ver Reservas</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Minhas Faturas</h5>
+                <p class="text-muted mb-2">Visualize e pague suas faturas</p>
+                <a href="#" class="btn btn-outline-success btn-sm">Ver Faturas</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm p-3">
+                <h5>Comunicados</h5>
+                <p class="text-muted mb-2">Veja avisos e mensagens do condomínio</p>
+                <a href="#" class="btn btn-outline-warning btn-sm">Ver Comunicados</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -3,70 +3,95 @@
 <h2 class="text-primary">Cadastrar Condômino</h2>
 <hr />
 
-<form asp-action="Cadastrar" method="post" style="max-width:700px;">
+<form asp-action="Cadastrar" method="post">
+    <!-- Tipo de condômino -->
     <div class="form-group mb-3">
-        <label asp-for="NomeCompleto"></label>
-        <input asp-for="NomeCompleto" class="form-control" />
-        <span asp-validation-for="NomeCompleto" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Cpf"></label>
-        <input asp-for="Cpf" class="form-control" />
-        <span asp-validation-for="Cpf" class="text-danger"></span>
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Email"></label>
-        <input asp-for="Email" class="form-control" />
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Telefone"></label>
-        <input asp-for="Telefone" class="form-control" />
-    </div>
-
-    <div class="form-group mb-3">
-        <label asp-for="Tipo"></label>
-        <select asp-for="Tipo" class="form-control" id="tipoSelect">
-            <option>Proprietário</option>
-            <option>Locatário</option>
+        <label for="Tipo">Tipo de Condômino</label>
+        <select id="Tipo" name="Tipo" class="form-select" required>
+            <option value="">Selecione...</option>
+            <option value="Proprietario">Proprietário</option>
+            <option value="Locatario">Locatário</option>
+            <option value="Funcionario">Funcionário</option>
         </select>
     </div>
 
-    <!-- Campos Locatário -->
-    <div id="camposLocatario" style="display:none;">
-        <h5 class="text-secondary mt-3">Dados de Locação</h5>
-        <div class="form-group mb-3">
-            <label asp-for="InicioLocacao">Início da Locação</label>
-            <input asp-for="InicioLocacao" type="date" class="form-control" />
+    <!-- Campos comuns -->
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label>Nome Completo</label>
+            <input type="text" name="NomeCompleto" class="form-control" required />
         </div>
-        <div class="form-group mb-3">
-            <label asp-for="FimLocacao">Fim da Locação</label>
-            <input asp-for="FimLocacao" type="date" class="form-control" />
-        </div>
-        <div class="form-group mb-3">
-            <label asp-for="ValorAluguel">Valor do Aluguel</label>
-            <input asp-for="ValorAluguel" class="form-control" type="number" step="0.01" />
+        <div class="col-md-6">
+            <label>CPF</label>
+            <input type="text" name="CPF" class="form-control" />
         </div>
     </div>
 
-    <div class="form-group mb-3">
-        <label asp-for="Observacoes"></label>
-        <textarea asp-for="Observacoes" class="form-control"></textarea>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label>E-mail</label>
+            <input type="email" name="Email" class="form-control" />
+        </div>
+        <div class="col-md-6">
+            <label>Telefone</label>
+            <input type="text" name="Telefone" class="form-control" />
+        </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">Salvar</button>
-    <a href="/Condomino" class="btn btn-secondary">Voltar</a>
+    <!-- Campos extras aparecem dinamicamente -->
+    <div id="camposExtras"></div>
+
+    <div class="text-end">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
 </form>
 
-@section Scripts {
-    <script>
-        const tipoSelect = document.getElementById("tipoSelect");
-        const camposLocatario = document.getElementById("camposLocatario");
+<script>
+    const tipoSelect = document.getElementById("Tipo");
+    const camposExtras = document.getElementById("camposExtras");
 
-        tipoSelect.addEventListener("change", () => {
-            camposLocatario.style.display = tipoSelect.value === "Locatário" ? "block" : "none";
-        });
-    </script>
-}
+    tipoSelect.addEventListener("change", () => {
+        const tipo = tipoSelect.value;
+        let html = "";
+
+        if (tipo === "Funcionario") {
+            html = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Cargo</label>
+                        <input type="text" name="Cargo" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Turno</label>
+                        <select name="Turno" class="form-select">
+                            <option>Manhã</option>
+                            <option>Tarde</option>
+                            <option>Noite</option>
+                            <option>Integral</option>
+                        </select>
+                    </div>
+                </div>`;
+        } 
+        else if (tipo === "Locatario") {
+            html = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Imóvel</label>
+                        <input type="text" name="Imovel" class="form-control" placeholder="Ex: APT-101" />
+                    </div>
+                </div>`;
+        } 
+        else if (tipo === "Proprietario") {
+            html = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Quantidade de Imóveis</label>
+                        <input type="number" name="QtdeImoveis" class="form-control" min="0" value="0" />
+                    </div>
+                </div>`;
+        }
+
+        camposExtras.innerHTML = html;
+    });
+</script>

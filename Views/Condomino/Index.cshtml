@@ -1,80 +1,233 @@
 @model IEnumerable<TrabalhoElvis2.Models.Condomino>
-
 @{
-    Layout = "_LayoutDashboard";
-    ViewData["Title"] = "Pessoas";
+    ViewData["Title"] = "Gestão de Condôminos";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
+    var tipoAtual = ViewBag.TipoAtual as string ?? "Proprietario";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h3 class="fw-bold">Pessoas</h3>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalPessoa">
-        <i class="fa-solid fa-plus"></i> Nova Pessoa
-    </button>
+<div class="container mt-4 mb-5">
+    <h2 class="text-primary mb-4">
+        <i class="fa-solid fa-users"></i> Gestão de Condôminos
+    </h2>
+
+    <!-- ======= FILTROS ======= -->
+    <div class="filtro-container mb-4">
+        <a asp-action="Index" asp-route-tipo="Proprietario"
+           class="filtro-btn @(tipoAtual == "Proprietario" ? "active" : "")">Proprietários</a>
+        <a asp-action="Index" asp-route-tipo="Locatario"
+           class="filtro-btn @(tipoAtual == "Locatario" ? "active" : "")">Locatários</a>
+        <a asp-action="Index" asp-route-tipo="Funcionario"
+           class="filtro-btn @(tipoAtual == "Funcionario" ? "active" : "")">Funcionários</a>
+    </div>
+
+    <!-- ======= BOTÃO NOVO ======= -->
+    <div class="d-flex justify-content-end mb-3">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCondomino">
+            <i class="fa-solid fa-user-plus"></i>
+            Novo Condômino
+        </button>
+    </div>
+
+    <!-- ======= LISTAGEM ======= -->
+    <div id="listaCondominos">
+        @if (!Model.Any())
+        {
+            <p class="text-muted">Nenhum registro encontrado.</p>
+        }
+        else
+        {
+            foreach (var c in Model)
+            {
+                <div class="card p-3 mb-3 shadow-sm pessoa-card">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5><i class="fa-regular fa-user"></i> @c.NomeCompleto</h5>
+
+                            @if (c.Tipo == "Funcionario")
+                            {
+                                <p><strong>Cargo:</strong> @c.Cargo</p>
+                                <p><strong>Turno:</strong> @c.Turno</p>
+                                <p><i class="fa-solid fa-phone"></i> @c.Telefone</p>
+                            }
+                            else if (c.Tipo == "Locatario")
+                            {
+                                <p><strong>Imóvel:</strong> @(c.ImovelNome ?? "N/D")</p>
+                                <p><i class="fa-solid fa-envelope"></i> @c.Email</p>
+                                <p><i class="fa-solid fa-phone"></i> @c.Telefone</p>
+                            }
+                            else if (c.Tipo == "Proprietario")
+                            {
+                                <p><strong>CPF:</strong> @c.CPF</p>
+                                <p><i class="fa-solid fa-envelope"></i> @c.Email</p>
+                                <p><i class="fa-solid fa-phone"></i> @c.Telefone</p>
+
+                                <span class="badge bg-dark mt-2">
+                                    @(c.QtdeImoveis == 0 ? "Nenhum imóvel" : c.QtdeImoveis == 1 ? "1 imóvel" : $"{c.QtdeImoveis} imóveis")
+                                </span>
+                            }
+                        </div>
+                        <span class="badge bg-dark align-self-start">Ativo</span>
+                    </div>
+                </div>
+            }
+        }
+    </div>
 </div>
 
-<div class="input-group mb-3">
-    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-    <input type="text" class="form-control" placeholder="Buscar por nome, CPF ou e-mail..." />
-</div>
-
-<div class="row">
-    @foreach (var c in Model)
-    {
-        <div class="col-md-6 mb-3">
-            <div class="card p-3 shadow-sm">
-                <h5><i class="fa-regular fa-user"></i> @c.NomeCompleto</h5>
-                <p class="mb-1 text-muted">CPF: @c.Cpf</p>
-                <p class="mb-1"><i class="fa-solid fa-envelope"></i> @c.Email</p>
-                <p class="mb-1"><i class="fa-solid fa-phone"></i> @c.Telefone</p>
-                <span class="badge bg-success mt-2">Ativo</span>
-            </div>
-        </div>
-    }
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="modalPessoa" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content p-3">
+<!-- ======= MODAL CADASTRO ======= -->
+<div class="modal fade" id="modalCondomino" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Cadastrar Nova Pessoa</h5>
+                <h5 class="modal-title">Cadastrar Novo Condômino</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
                 <form asp-action="Cadastrar" method="post">
-                    <div class="row g-3">
+                    <!-- Tipo de Condômino -->
+                    <div class="form-group mb-3">
+                        <label for="Tipo">Tipo de Condômino</label>
+                        <select id="Tipo" name="Tipo" class="form-select" required>
+                            <option value="">Selecione...</option>
+                            <option value="Proprietario">Proprietário</option>
+                            <option value="Locatario">Locatário</option>
+                            <option value="Funcionario">Funcionário</option>
+                        </select>
+                    </div>
+
+                    <!-- Campos básicos -->
+                    <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="form-label">Nome Completo</label>
-                            <input name="NomeCompleto" class="form-control" />
+                            <label>Nome Completo</label>
+                            <input type="text" name="NomeCompleto" class="form-control" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label">CPF</label>
-                            <input name="Cpf" class="form-control" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">E-mail</label>
-                            <input name="Email" class="form-control" />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Telefone</label>
-                            <input name="Telefone" class="form-control" />
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label">Tipo</label>
-                            <select name="Tipo" class="form-select">
-                                <option value="Proprietário">Proprietário</option>
-                                <option value="Locatário">Locatário</option>
-                            </select>
+                            <label>CPF</label>
+                            <input type="text" name="CPF" class="form-control" />
                         </div>
                     </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label>E-mail</label>
+                            <input type="email" name="Email" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label>Telefone</label>
+                            <input type="text" name="Telefone" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- Campos adicionais dinâmicos -->
+                    <div id="camposExtras"></div>
 
                     <div class="text-end mt-3">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
+
+@section Styles {
+<style>
+    .filtro-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        background: #f5f5f7;
+        border-radius: 40px;
+        padding: 5px;
+    }
+
+    .filtro-btn {
+        flex: 1;
+        text-align: center;
+        border: none;
+        background: transparent;
+        border-radius: 40px;
+        padding: 10px 20px;
+        font-weight: 600;
+        color: #333;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .filtro-btn.active {
+        background-color: #ffffff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        color: #007bff;
+    }
+
+    .filtro-btn:hover {
+        background-color: #e9ecef;
+    }
+
+    .pessoa-card {
+        border-radius: 15px;
+        border: none;
+    }
+
+    .badge.bg-dark {
+        background-color: #000 !important;
+    }
+</style>
+}
+
+@section Scripts {
+<script>
+    const tipoSelect = document.getElementById("Tipo");
+    const camposExtras = document.getElementById("camposExtras");
+
+    tipoSelect.addEventListener("change", () => {
+        const tipo = tipoSelect.value;
+        let html = "";
+
+        if (tipo === "Funcionario") {
+            html = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Cargo</label>
+                        <input type="text" name="Cargo" class="form-control" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label>Turno</label>
+                        <select name="Turno" class="form-select">
+                            <option>Manhã</option>
+                            <option>Tarde</option>
+                            <option>Noite</option>
+                            <option>Integral</option>
+                        </select>
+                    </div>
+                </div>`;
+        }
+        else if (tipo === "Locatario") {
+            html = `
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label>Imóvel</label>
+                        <select name="ImovelId" class="form-select">
+                            <option value="">Selecione o Imóvel...</option>
+                            @foreach (var imovel in ViewBag.Imoveis ?? new List<TrabalhoElvis2.Models.Imovel>())
+                            {
+                                <option value="@imovel.Id">@imovel.Codigo - @imovel.Tipo</option>
+                            }
+                        </select>
+                    </div>
+                </div>`;
+        }
+        else if (tipo === "Proprietario") {
+            html = `
+                <div class="alert alert-info mt-2">
+                    <i class="fa-solid fa-circle-info"></i>
+                    A quantidade de imóveis será atualizada automaticamente conforme o cadastro de novos imóveis.
+                </div>`;
+        }
+
+        camposExtras.innerHTML = html;
+    });
+</script>
+}

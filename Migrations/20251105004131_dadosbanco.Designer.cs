@@ -12,8 +12,8 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251104190155_CriacaoTabel")]
-    partial class CriacaoTabel
+    [Migration("20251105004131_dadosbanco")]
+    partial class dadosbanco
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

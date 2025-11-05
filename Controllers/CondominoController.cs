@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TrabalhoElvis2.Context;
 using TrabalhoElvis2.Models;
 
@@ -7,30 +6,45 @@ namespace TrabalhoElvis2.Controllers
 {
     public class CondominoController : Controller
     {
-        private readonly LoginContext _ctx;
-        public CondominoController(LoginContext ctx) => _ctx = ctx;
+        private readonly LoginContext _context;
 
-        // === LISTAR ===
-        public async Task<IActionResult> Index()
+        public CondominoController(LoginContext context)
         {
-            var lista = await _ctx.Condominos
-                .Include(c => c.Imoveis)
-                .OrderBy(c => c.NomeCompleto)
-                .ToListAsync();
-            return View(lista);
+            _context = context;
         }
 
-        // === CADASTRAR ===
-        [HttpPost]
-        public async Task<IActionResult> Cadastrar(Condomino model)
+        // === LISTAGEM COM FILTRO ===
+        public IActionResult Index(string tipo = "Proprietario")
         {
-            if (!ModelState.IsValid)
-                return View("Index", await _ctx.Condominos.ToListAsync());
+            ViewBag.TipoAtual = tipo;
+            var condominos = _context.Condominos
+                .Where(c => c.Tipo == tipo)
+                .ToList();
 
-            _ctx.Condominos.Add(model);
-            await _ctx.SaveChangesAsync();
+            ViewBag.Imoveis = _context.Imoveis.ToList(); // puxa imóveis pro modal
+            return View(condominos);
+        }
 
-            return RedirectToAction(nameof(Index));
+        [HttpPost]
+        public IActionResult Cadastrar(Condomino cond)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Condominos.Add(cond);
+                _context.SaveChanges();
+
+                // Atualiza imóveis se for proprietário
+                if (cond.Tipo == "Proprietario")
+                {
+                    cond.QtdeImoveis = _context.Imoveis.Count(i => i.CondominoId == cond.Id);
+                    _context.SaveChanges();
+                }
+
+                return RedirectToAction("Index", new { tipo = cond.Tipo });
+            }
+
+            ViewBag.Imoveis = _context.Imoveis.ToList();
+            return View("Index", _context.Condominos.ToList());
         }
     }
 }

@@ -1,214 +1,159 @@
-/* =============================
-   ESTILO GERAL DA PÁGINA
-============================= */
-.container-page {
-    padding: 40px;
+/* ESTILO GERAL*/
+body {
     background-color: #f5f7fb;
-    border-radius: 12px;
-    min-height: 85vh;
+    font-family: "Inter", sans-serif;
 }
 
-h2 {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.container {
+    max-width: 1100px;
 }
 
-.subtitle {
-    color: #6c757d;
+/*    CABEÇALHO DA PÁGINA */
+h3 {
+    font-weight: 700;
+    color: #1e293b;
+}
+
+p.subtitle {
+    color: #6b7280;
     font-size: 0.95rem;
-    margin-bottom: 20px;
+    margin-bottom: 1.5rem;
 }
 
 /* =============================
-   SEÇÃO DE AÇÕES (BUSCA + BOTÃO)
+   BOTÃO "NOVO IMÓVEL"
 ============================= */
-.actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 25px;
-}
-
-.search {
-    width: 60%;
-    padding: 8px 12px;
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
-}
-
-.search:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
-}
-
-.btn-novo {
-    background-color: #007bff;
-    color: white;
+.btn-primary {
+    background-color: #0061f2;
     border: none;
-    padding: 9px 16px;
-    border-radius: 6px;
-    font-size: 0.95rem;
+    border-radius: 10px;
+    padding: 8px 16px;
     font-weight: 500;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 }
 
-.btn-novo:hover {
-    background-color: #0056b3;
+.btn-primary:hover {
+    background-color: #004ecb;
+    transform: translateY(-1px);
 }
 
 /* =============================
-   TABELA DE IMÓVEIS
+   BUSCA E FILTROS
 ============================= */
-.tabela {
-    background-color: white;
+input.form-control, select.form-select {
     border-radius: 10px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-}
-
-.table {
-    margin-bottom: 0;
-    border-collapse: separate;
-    border-spacing: 0;
-}
-
-.table thead {
-    background-color: #f8f9fa;
-}
-
-.table th {
-    font-weight: 600;
-    color: #495057;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-}
-
-.table td {
-    vertical-align: middle;
-    color: #212529;
+    border: 1px solid #d1d5db;
+    box-shadow: none;
     font-size: 0.95rem;
 }
 
-.table-hover tbody tr:hover {
-    background-color: #f1f5fb;
+input.form-control:focus, select.form-select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-.text-center i {
-    font-size: 1rem;
+/* =============================
+   LISTA DE IMÓVEIS (CARDS)
+============================= */
+.list-group-item {
+    background-color: #fff;
+    border-radius: 16px;
+    border: none;
+    padding: 24px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.list-group-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.list-group-item h5 {
+    color: #111827;
+    font-weight: 600;
+}
+
+.list-group-item p {
+    margin: 0;
+}
+
+/* Ícones e detalhes */
+.list-group-item i {
+    color: #2563eb;
+}
+
+.text-muted i {
+    color: #9ca3af;
 }
 
 /* =============================
    STATUS DO IMÓVEL
 ============================= */
-.status {
-    display: inline-block;
-    padding: 5px 10px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    color: white;
+.badge {
+    font-size: 0.9rem;
+    border-radius: 12px;
+    padding: 6px 14px;
     font-weight: 500;
-    text-transform: capitalize;
 }
 
-.status.vago {
-    background-color: #28a745;
+.bg-dark {
+    background-color: #111827 !important;
+    color: white !important;
 }
 
-.status.ocupado {
-    background-color: #dc3545;
+.bg-light {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
 }
 
 /* =============================
-   BOTÕES DE AÇÃO (EDITAR/EXCLUIR)
+   PREÇO DO ALUGUEL
+============================= */
+.text-success {
+    color: #16a34a !important;
+}
+
+/* =============================
+   AÇÕES (EDITAR/EXCLUIR)
 ============================= */
 .btn-outline-primary, .btn-outline-danger {
-    border-radius: 6px;
-    padding: 4px 8px;
-    font-size: 0.85rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    padding: 4px 10px;
+    transition: all 0.2s ease;
 }
 
 .btn-outline-primary:hover {
-    background-color: #007bff;
-    color: white;
+    background-color: #2563eb;
+    color: #fff;
 }
 
 .btn-outline-danger:hover {
-    background-color: #dc3545;
-    color: white;
-}
-
-/* =============================
-   MODAL (CADASTRO DE IMÓVEL)
-============================= */
-.modal-content {
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
-    border: none;
-}
-
-.modal-header {
-    border-bottom: 1px solid #e9ecef;
-}
-
-.modal-title {
-    font-weight: 600;
-    color: #0d6efd;
-}
-
-.modal-body label {
-    font-weight: 500;
-    color: #495057;
-}
-
-.modal-body input, .modal-body select, .modal-body textarea {
-    border-radius: 6px;
-    border: 1px solid #d0d7de;
-}
-
-.modal-body input:focus,
-.modal-body select:focus,
-.modal-body textarea:focus {
-    border-color: #0d6efd;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.15);
-}
-
-.modal-footer {
-    border-top: 1px solid #e9ecef;
-}
-
-.btn-primary {
-    background-color: #0d6efd;
-    border: none;
-}
-
-.btn-primary:hover {
-    background-color: #0b5ed7;
+    background-color: #dc2626;
+    color: #fff;
 }
 
 /* =============================
    RESPONSIVIDADE
 ============================= */
 @media (max-width: 768px) {
-    .actions {
+    .list-group-item {
+        padding: 16px;
+    }
+
+    .d-flex.flex-wrap {
         flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
+        align-items: flex-start !important;
     }
 
-    .search {
+    .text-end {
+        margin-top: 10px;
         width: 100%;
+        text-align: left !important;
     }
 
-    .btn-novo {
+    .btn-primary {
         width: 100%;
-    }
-
-    .table th, .table td {
-        font-size: 0.85rem;
     }
 }

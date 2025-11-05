@@ -5,36 +5,43 @@ namespace TrabalhoElvis2.Models
 {
     public class Condomino
     {
+        [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "O nome é obrigatório.")]
-        public string NomeCompleto { get; set; } = string.Empty;
+        [Required]
+        [Display(Name = "Nome Completo")]
+        public string NomeCompleto { get; set; }
 
-        [Required(ErrorMessage = "O CPF é obrigatório.")]
-        public string Cpf { get; set; } = string.Empty;
+        [Display(Name = "CPF")]
+        public string? CPF { get; set; }
 
-        [Required(ErrorMessage = "O e-mail é obrigatório.")]
-        [EmailAddress(ErrorMessage = "E-mail inválido.")]
-        public string Email { get; set; } = string.Empty;
+        [EmailAddress]
+        public string? Email { get; set; }
 
-        [Phone(ErrorMessage = "Telefone inválido.")]
+        [Phone]
         public string? Telefone { get; set; }
 
-        [Required(ErrorMessage = "Selecione o tipo do condômino.")]
-        public string Tipo { get; set; } = "Proprietário"; // Proprietário ou Locatário
+        [Display(Name = "Tipo de Condômino")]
+        public string Tipo { get; set; } // Proprietario, Locatario, Funcionario
 
-        [DataType(DataType.Date)]
+        // Campos extras (para funcionários)
+        public string? Cargo { get; set; }
+        public string? Turno { get; set; }
+
+        // Campos extras (para locatários)
         public DateTime? InicioLocacao { get; set; }
-
-        [DataType(DataType.Date)]
         public DateTime? FimLocacao { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
         public decimal? ValorAluguel { get; set; }
 
-        public string? Observacoes { get; set; }
+        // === Campos para exibição e associação ===
+        [NotMapped]
+        public string? ImovelNome { get; set; } // usado na view para exibir o nome/código do imóvel
 
-        // 🔗 Relação 1:N (um condômino -> vários imóveis)
-        public ICollection<Imovel>? Imoveis { get; set; }
+        [NotMapped]
+        public int QtdeImoveis { get; set; } // usado para exibir quantos imóveis o proprietário possui
+
+        public bool Ativo { get; set; } = true;
     }
 }

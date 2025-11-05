@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251105034616_dadoss")]
+    partial class dadoss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,12 +127,18 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<DateTime?>("FimLocacao")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Imovel")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("InicioLocacao")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NomeCompleto")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QtdeImoveis")
+                        .HasColumnType("int");
 
                     b.Property<string>("Telefone")
                         .HasColumnType("nvarchar(max)");
@@ -142,7 +151,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("ValorAluguel")
-                        .HasColumnType("decimal(10,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
