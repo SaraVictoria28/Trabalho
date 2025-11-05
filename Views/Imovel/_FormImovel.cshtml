@@ -4,18 +4,19 @@
     <div class="col">
         <label asp-for="Codigo">Código do Imóvel</label>
         <input asp-for="Codigo" class="form-control" />
+        <span asp-validation-for="Codigo" class="text-danger"></span> <!-- Exibe a mensagem de erro aqui -->
     </div>
     <div class="col">
         <label asp-for="Tipo">Tipo</label>
         <select asp-for="Tipo" class="form-select">
             <option value="">Selecione</option>
             <option>Apartamento</option>
-            <option>Casa</option>
             <option>Cobertura</option>
             <option>Sala Comercial</option>
         </select>
     </div>
 </div>
+
 
 <div class="row mb-3">
     <div class="col">

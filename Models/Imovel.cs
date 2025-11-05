@@ -16,16 +16,17 @@ namespace TrabalhoElvis2.Models
         public string Tipo { get; set; } = string.Empty;
 
         [Range(1, 20, ErrorMessage = "Informe um número válido de quartos.")]
-        public int Quartos { get; set; }
+        public int? Quartos { get; set; } // antes era int
 
         [Range(1, 10, ErrorMessage = "Informe um número válido de banheiros.")]
-        public int Banheiros { get; set; }
+        public int? Banheiros { get; set; } // antes era int
 
         [Required(ErrorMessage = "A metragem é obrigatória.")]
-        public double Metragem { get; set; }
+        public double? Metragem { get; set; } // antes era double
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal ValorAluguel { get; set; }
+        [Range(0.01, 9999999, ErrorMessage = "Informe um valor de aluguel válido.")]
+        public decimal? ValorAluguel { get; set; } // antes era decimal
 
         public string? Observacoes { get; set; }
 
@@ -33,8 +34,9 @@ namespace TrabalhoElvis2.Models
         public string Status { get; set; } = "Vago"; // Vago ou Ocupado
 
         // FK com proprietário
+        [Required(ErrorMessage = "O proprietário é obrigatório.")]
         [Display(Name = "Proprietário")]
-        public int? CondominoId { get; set; }
+        public int CondominoId { get; set; }
         public Condomino? Condomino { get; set; }
     }
 }

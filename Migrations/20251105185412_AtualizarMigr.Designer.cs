@@ -12,8 +12,8 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251105040524_dadosta")]
-    partial class dadosta
+    [Migration("20251105185412_AtualizarMigr")]
+    partial class AtualizarMigr
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -190,7 +190,7 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Banheiros")
+                    b.Property<int?>("Banheiros")
                         .HasColumnType("int");
 
                     b.Property<string>("Codigo")
@@ -207,7 +207,7 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<string>("Observacoes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quartos")
+                    b.Property<int?>("Quartos")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -220,7 +220,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("ValorAluguel")
+                    b.Property<decimal?>("ValorAluguel")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");

@@ -20,9 +20,8 @@ p.subtitle {
     margin-bottom: 1.5rem;
 }
 
-/* =============================
-   BOTÃO "NOVO IMÓVEL"
-============================= */
+   /* BOTÃO "NOVO IMÓVEL" */
+
 .btn-primary {
     background-color: #0061f2;
     border: none;
@@ -156,4 +155,17 @@ input.form-control:focus, select.form-select:focus {
     .btn-primary {
         width: 100%;
     }
+}
+/*   REMOVER SETAS DOS CAMPOS NUMBER */
+
+/* Remove setas no Chrome, Edge e Safari */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove setas no Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }

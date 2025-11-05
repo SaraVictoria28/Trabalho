@@ -57,7 +57,9 @@
         <select asp-for="CondominoId" class="form-select" asp-items="ViewBag.Condominos">
             <option value="">Selecione...</option>
         </select>
+        <span asp-validation-for="CondominoId" class="text-danger"></span> <!-- Exibe mensagem de erro -->
     </div>
+
 
     <div class="mb-3">
         <label asp-for="Observacoes" class="form-label"></label>

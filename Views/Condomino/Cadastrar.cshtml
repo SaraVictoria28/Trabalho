@@ -1,11 +1,11 @@
 @model TrabalhoElvis2.Models.Condomino
 
-<h2 class="text-primary">Cadastrar Condômino</h2>
+<h2 class="text-primary text-center">Cadastrar Condômino</h2>
 <hr />
 
 <form asp-action="Cadastrar" method="post">
     <!-- Tipo de condômino -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-4">
         <label for="Tipo">Tipo de Condômino</label>
         <select id="Tipo" name="Tipo" class="form-select" required>
             <option value="">Selecione...</option>
@@ -16,7 +16,7 @@
     </div>
 
     <!-- Campos comuns -->
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-md-6">
             <label>Nome Completo</label>
             <input type="text" name="NomeCompleto" class="form-control" required />
@@ -27,7 +27,7 @@
         </div>
     </div>
 
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-md-6">
             <label>E-mail</label>
             <input type="email" name="Email" class="form-control" />
@@ -41,6 +41,7 @@
     <!-- Campos extras aparecem dinamicamente -->
     <div id="camposExtras"></div>
 
+    <!-- Botões de ação -->
     <div class="text-end">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -72,8 +73,7 @@
                         </select>
                     </div>
                 </div>`;
-        } 
-        else if (tipo === "Locatario") {
+        } else if (tipo === "Locatario") {
             html = `
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -81,8 +81,7 @@
                         <input type="text" name="Imovel" class="form-control" placeholder="Ex: APT-101" />
                     </div>
                 </div>`;
-        } 
-        else if (tipo === "Proprietario") {
+        } else if (tipo === "Proprietario") {
             html = `
                 <div class="row mb-3">
                     <div class="col-md-6">

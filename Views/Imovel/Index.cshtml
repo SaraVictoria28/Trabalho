@@ -7,7 +7,7 @@
 }
 
 @section Styles {
-     <!-- Importa uma biblioteca (framework) e ícones -->
+    <!-- Importa uma biblioteca (framework) e ícones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/imoveis.css" />
@@ -31,26 +31,29 @@ else
                 <h3 class="fw-bold text-dark mb-1">Imóveis</h3>
                 <p class="text-muted mb-0">Gestão de imóveis do condomínio</p>
             </div>
-                    <!-- Botão que abre o modal de cadastro -->
-            <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#modalCadastro">
+            <!-- Botão que abre o modal de cadastro -->
+            <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
+                data-bs-target="#modalCadastro">
                 <i class="bi bi-plus-lg"></i> Novo Imóvel
             </button>
         </div>
 
         <!-- FILTROS de status E BUSCA -->
         <form method="get" asp-action="Index" class="d-flex flex-wrap gap-2 mb-4">
-            <div class="flex-grow-1">
-                <input type="text" class="form-control" placeholder="Buscar por código, endereço ou proprietário..." disabled />
-            </div>
-            <div>
-                <!-- AQUI ESTÁ O SELECT FUNCIONAL -->
-                <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
-                    <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status</option>
-                    <option value="Ocupado" selected="@(ViewBag.StatusFiltro == "Ocupado")">Ocupado</option>
-                    <option value="Vago" selected="@(ViewBag.StatusFiltro == "Vago")">Vago</option>
-                </select>
-            </div>
-        </form>
+        <div class="flex-grow-1">
+            <input type="text" name="termoBusca" class="form-control"
+                placeholder="Buscar por código, endereço ou proprietário..." value="@ViewBag.TermoBusca" />
+        </div>
+        <div>
+            <!-- AQUI ESTÁ O SELECT FUNCIONAL -->
+            <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
+                <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status
+                </option>
+                <option value="Ocupado" selected="@(ViewBag.StatusFiltro == "Ocupado")">Ocupado</option>
+                <option value="Vago" selected="@(ViewBag.StatusFiltro == "Vago")">Vago</option>
+            </select>
+        </div>
+    </form>
 
         <!-- LISTA DE IMÓVEIS -->
         <div class="list-group">
@@ -74,11 +77,15 @@ else
                         </div>
 
                         <div class="text-end">
-                            <span class="badge rounded-pill px-3 py-2 fs-6 @(item.Status == "Ocupado" ? "bg-dark" : "bg-light text-dark border")">
+                            <span
+                                class="badge rounded-pill px-3 py-2 fs-6 @(item.Status == "Ocupado" ? "bg-dark" : "bg-light text-dark border")">
                                 @item.Status
                             </span>
                             <p class="text-muted mt-3 mb-1">Aluguel</p>
-                            <h5 class="text-success fw-bold">R$ @item.ValorAluguel.ToString("N2")</h5>
+                            <h5 class="text-success fw-bold">
+                                @(item.ValorAluguel.HasValue ? $"R$ {item.ValorAluguel.Value.ToString("N2")}" : "")
+                            </h5>
+
                         </div>
                     </div>
 
@@ -87,7 +94,8 @@ else
                             Proprietário <strong>@item.Condomino?.NomeCompleto</strong>
                         </p>
                         <div>
-                            <a asp-controller="Imovel" asp-action="Editar" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-1">
+                            <a asp-controller="Imovel" asp-action="Editar" asp-route-id="@item.Id"
+                                class="btn btn-sm btn-outline-primary me-1">
                                 <i class="bi bi-pencil"></i>
                             </a>
                             <form asp-action="Excluir" asp-route-id="@item.Id" method="post" style="display:inline;">

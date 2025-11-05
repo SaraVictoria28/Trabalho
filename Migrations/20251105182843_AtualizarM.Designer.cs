@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251105182843_AtualizarM")]
+    partial class AtualizarM
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +190,7 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Banheiros")
+                    b.Property<int>("Banheiros")
                         .HasColumnType("int");
 
                     b.Property<string>("Codigo")
@@ -204,7 +207,7 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<string>("Observacoes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Quartos")
+                    b.Property<int>("Quartos")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")

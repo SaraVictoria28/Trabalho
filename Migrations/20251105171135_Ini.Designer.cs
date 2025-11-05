@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251105171135_Ini")]
+    partial class Ini
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,7 +190,7 @@ namespace TrabalhoElvis2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Banheiros")
+                    b.Property<int>("Banheiros")
                         .HasColumnType("int");
 
                     b.Property<string>("Codigo")
@@ -195,7 +198,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("CondominoId")
+                    b.Property<int?>("CondominoId")
                         .HasColumnType("int");
 
                     b.Property<double>("Metragem")
@@ -204,7 +207,7 @@ namespace TrabalhoElvis2.Migrations
                     b.Property<string>("Observacoes")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Quartos")
+                    b.Property<int>("Quartos")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
@@ -217,7 +220,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal?>("ValorAluguel")
+                    b.Property<decimal>("ValorAluguel")
                         .HasColumnType("decimal(10,2)");
 
                     b.HasKey("Id");
@@ -300,9 +303,7 @@ namespace TrabalhoElvis2.Migrations
                 {
                     b.HasOne("TrabalhoElvis2.Models.Condomino", "Condomino")
                         .WithMany()
-                        .HasForeignKey("CondominoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CondominoId");
 
                     b.Navigation("Condomino");
                 });

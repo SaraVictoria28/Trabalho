@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251105175200_I")]
+    partial class I
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -195,7 +198,7 @@ namespace TrabalhoElvis2.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("CondominoId")
+                    b.Property<int?>("CondominoId")
                         .HasColumnType("int");
 
                     b.Property<double>("Metragem")
@@ -300,9 +303,7 @@ namespace TrabalhoElvis2.Migrations
                 {
                     b.HasOne("TrabalhoElvis2.Models.Condomino", "Condomino")
                         .WithMany()
-                        .HasForeignKey("CondominoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CondominoId");
 
                     b.Navigation("Condomino");
                 });
