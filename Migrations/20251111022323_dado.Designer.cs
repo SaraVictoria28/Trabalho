@@ -12,8 +12,8 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    [Migration("20251110183343_cadastr")]
-    partial class cadastr
+    [Migration("20251111022323_dado")]
+    partial class dado
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,6 +63,44 @@ namespace TrabalhoElvis2.Migrations
                     b.HasIndex("ImovelId");
 
                     b.ToTable("Contratos");
+                });
+
+            modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ComprovantePagamento")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ContratoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Pagamento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QrCodePix")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal>("Valor")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<DateTime>("Vencimento")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContratoId");
+
+                    b.ToTable("Boletos");
                 });
 
             modelBuilder.Entity("TrabalhoElvis2.Models.Condominio", b =>
@@ -292,6 +330,17 @@ namespace TrabalhoElvis2.Migrations
                     b.Navigation("Imovel");
                 });
 
+            modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
+                {
+                    b.HasOne("Trabalho.Models.Contrato", "Contrato")
+                        .WithMany("Boletos")
+                        .HasForeignKey("ContratoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contrato");
+                });
+
             modelBuilder.Entity("TrabalhoElvis2.Models.Condominio", b =>
                 {
                     b.HasOne("TrabalhoElvis2.Models.Usuario", "Admin")
@@ -312,6 +361,11 @@ namespace TrabalhoElvis2.Migrations
                         .IsRequired();
 
                     b.Navigation("Condomino");
+                });
+
+            modelBuilder.Entity("Trabalho.Models.Contrato", b =>
+                {
+                    b.Navigation("Boletos");
                 });
 #pragma warning restore 612, 618
         }

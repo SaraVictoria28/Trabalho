@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrabalhoElvis2.Context;
 
@@ -11,9 +12,11 @@ using TrabalhoElvis2.Context;
 namespace TrabalhoElvis2.Migrations
 {
     [DbContext(typeof(LoginContext))]
-    partial class LoginContextModelSnapshot : ModelSnapshot
+    [Migration("20251111015341_dadosta")]
+    partial class dadosta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,44 +63,6 @@ namespace TrabalhoElvis2.Migrations
                     b.HasIndex("ImovelId");
 
                     b.ToTable("Contratos");
-                });
-
-            modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ComprovantePagamento")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContratoId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Pagamento")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("QrCodePix")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<decimal>("Valor")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.Property<DateTime>("Vencimento")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContratoId");
-
-                    b.ToTable("Boletos");
                 });
 
             modelBuilder.Entity("TrabalhoElvis2.Models.Condominio", b =>
@@ -327,17 +292,6 @@ namespace TrabalhoElvis2.Migrations
                     b.Navigation("Imovel");
                 });
 
-            modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
-                {
-                    b.HasOne("Trabalho.Models.Contrato", "Contrato")
-                        .WithMany("Boletos")
-                        .HasForeignKey("ContratoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Contrato");
-                });
-
             modelBuilder.Entity("TrabalhoElvis2.Models.Condominio", b =>
                 {
                     b.HasOne("TrabalhoElvis2.Models.Usuario", "Admin")
@@ -358,11 +312,6 @@ namespace TrabalhoElvis2.Migrations
                         .IsRequired();
 
                     b.Navigation("Condomino");
-                });
-
-            modelBuilder.Entity("Trabalho.Models.Contrato", b =>
-                {
-                    b.Navigation("Boletos");
                 });
 #pragma warning restore 612, 618
         }

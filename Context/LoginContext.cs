@@ -15,5 +15,6 @@ namespace TrabalhoElvis2.Context
         public DbSet<Condomino> Condominos { get; set; }
         public DbSet<Imovel> Imoveis { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<Boleto> Boletos { get; set; }
     }
 }

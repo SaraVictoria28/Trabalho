@@ -36,5 +36,7 @@ namespace Trabalho.Models
 
         [Display(Name = "Status")]
         public string Status { get; set; } = "Ativo";
+
+        public ICollection<Boleto> Boletos { get; set; } = new List<Boleto>();
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrabalhoElvis2.Migrations
 {
     /// <inheritdoc />
-    public partial class cadastr : Migration
+    public partial class dadosta : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
