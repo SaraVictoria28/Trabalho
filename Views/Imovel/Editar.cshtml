@@ -1,49 +1,236 @@
 @model TrabalhoElvis2.Models.Imovel
 @{
-    Layout = "_Layout";
+    Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
     ViewData["Title"] = "Editar Imóvel";
 }
 
-<link rel="stylesheet" href="~/css/imoveis.css" />
+@section Styles {
+    <link rel="stylesheet" href="@Url.Content("~/css/imoveis.css")?v=@DateTime.Now.Ticks" />
+}
 
-<div class="container-page">
+<style>
+    /* ======== VARIÁVEIS DE TEMA GLOBAL ======== */
+    :root {
+        --bg-main: #f3f4f6;
+        --modal-bg: #fff;
+        --text-main: #222;
+        --input-bg: #f9fafb;
+        --input-border: #d1d5db;
+        --input-focus: #2563eb;
+        --btn-primary-bg: #2563eb;
+        --btn-primary-hover: #1e4fd8;
+        --btn-secondary-bg: #f3f4f6;
+        --btn-secondary-hover: #e5e7eb;
+        --label-color: #374151;
+        --card-bg: #fff;
+        --card-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        --table-header-bg: #f3f4f6;
+        --table-row-bg: #fff;
+        --table-row-bg-alt: #f9fafb;
+    }
+    body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+    }
+    .edit-modal, .card-contrato, .list-group-item, .modal-content {
+        background: var(--modal-bg);
+        color: var(--text-main);
+        box-shadow: var(--card-shadow);
+    }
+    .table th {
+        background: var(--table-header-bg);
+        color: var (--text-main);
+    }
+    .table tr {
+        background: var(--table-row-bg);
+    }
+    .table tr:nth-child(even) {
+        background: var(--table-row-bg-alt);
+    }
+    label {
+        color: var(--label-color);
+    }
+    .form-control, .form-select, textarea {
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border);
+        color: var (--text-main);
+    }
+    .form-control:focus, .form-select:focus, textarea:focus {
+        border-color: var(--input-focus);
+        box-shadow: 0 0 0 3px var(--input-focus);
+        background-color: var(--modal-bg);
+        color: var (--text-main);
+    }
+    .btn-primary {
+        background-color: var(--btn-primary-bg);
+        color: #fff;
+    }
+    .btn-primary:hover {
+        background-color: var(--btn-primary-hover);
+    }
+    .btn-secondary {
+        background-color: var(--btn-secondary-bg);
+        color: var(--text-main);
+    }
+    .btn-secondary:hover {
+        background-color: var(--btn-secondary-hover);
+    }
+
+    /* ======== FUNDO ESCURECIDO E CLARO ======== */
+    body {
+        background-color: var(--bg-main, #f3f4f6);
+        color: var(--text-main, #222);
+        backdrop-filter: blur(4px);
+        overflow: hidden;
+    }
+
+    :root {
+        --bg-main: #f3f4f6;
+        --modal-bg: #fff;
+        --text-main: #222;
+        --input-bg: #f9fafb;
+        --input-border: #d1d5db;
+        --input-focus: #2563eb;
+        --btn-primary-bg: #2563eb;
+        --btn-primary-hover: #1e4fd8;
+        --btn-secondary-bg: #f3f4f6;
+        --btn-secondary-hover: #e5e7eb;
+        --label-color: #374151;
+    }
+
+    /* ======== CONTAINER CENTRAL ======== */
+    .edit-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: var(--modal-bg);
+        color: var(--text-main);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        width: 650px;
+        max-width: 90%;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    /* ======== TÍTULO ======== */
+    .edit-modal h2 {
+        text-align: center;
+        font-weight: 700;
+        color: var(--btn-primary-bg);
+        margin-bottom: 25px;
+    }
+
+    /* ======== CAMPOS ======== */
+    label {
+        font-weight: 600;
+        color: var(--label-color);
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+        border-radius: 10px;
+        border: 1px solid var(--input-border);
+        background-color: var(--input-bg);
+        color: var(--text-main);
+        font-size: 0.95rem;
+        padding: 10px 12px;
+        transition: all 0.25s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus {
+        border-color: var(--input-focus);
+        box-shadow: 0 0 0 3px var(--input-focus);
+        background-color: var(--modal-bg);
+        color: var(--text-main);
+    }
+
+    .row.mb-3 {
+        margin-bottom: 1.2rem !important;
+    }
+
+    .col {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ======== BOTÕES ======== */
+    .btn {
+        border-radius: 10px;
+        font-weight: 500;
+        padding: 10px 18px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background-color: var(--btn-primary-bg);
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--btn-primary-hover);
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background-color: var(--btn-secondary-bg);
+        border: none;
+        color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--btn-secondary-hover);
+    }
+
+    /* ======== RESPONSIVIDADE ======== */
+</style>
+
+<div class="edit-modal">
     <h2>Editar Imóvel</h2>
 
-    <form asp-action="Editar" method="post" class="mt-4">
+    <form asp-action="Editar" method="post">
         <input type="hidden" asp-for="Id" />
 
         <div class="row mb-3">
-            <div class="col">
-                <label asp-for="Codigo">Código</label>
+            <div class="col-md-6">
+                <label asp-for="Codigo"></label>
                 <input asp-for="Codigo" class="form-control" />
             </div>
-            <div class="col">
-                <label asp-for="Tipo">Tipo</label>
+            <div class="col-md-6">
+                <label asp-for="Tipo"></label>
                 <input asp-for="Tipo" class="form-control" />
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col">
-                <label asp-for="Quartos">Quartos</label>
+            <div class="col-md-4">
+                <label asp-for="Quartos"></label>
                 <input asp-for="Quartos" type="number" class="form-control" />
             </div>
-            <div class="col">
-                <label asp-for="Banheiros">Banheiros</label>
+            <div class="col-md-4">
+                <label asp-for="Banheiros"></label>
                 <input asp-for="Banheiros" type="number" class="form-control" />
             </div>
-            <div class="col">
-                <label asp-for="Metragem">Metragem (m²)</label>
+            <div class="col-md-4">
+                <label asp-for="Metragem"></label>
                 <input asp-for="Metragem" type="number" class="form-control" />
             </div>
         </div>
 
         <div class="row mb-3">
-            <div class="col">
-                <label asp-for="ValorAluguel">Valor do Aluguel</label>
+            <div class="col-md-6">
+                <label asp-for="ValorAluguel"></label>
                 <input asp-for="ValorAluguel" type="number" step="0.01" class="form-control" />
             </div>
-            <div class="col">
+            <div class="col-md-6">
                 <label asp-for="CondominoId">Proprietário</label>
                 <select asp-for="CondominoId" class="form-select" asp-items="ViewBag.Condominos">
                     <option value="">Selecione</option>
@@ -52,7 +239,7 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Status">Status</label>
+            <label asp-for="Status"></label>
             <select asp-for="Status" class="form-select">
                 <option value="Vago">Vago</option>
                 <option value="Ocupado">Ocupado</option>
@@ -60,14 +247,13 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Observacoes">Observações</label>
+            <label asp-for="Observacoes"></label>
             <textarea asp-for="Observacoes" class="form-control"></textarea>
         </div>
 
-        <div class="mt-4">
+        <div class="mt-4 text-end">
+            <a asp-action="Index" class="btn btn-secondary me-2">Cancelar</a>
             <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
         </div>
     </form>
 </div>
-0

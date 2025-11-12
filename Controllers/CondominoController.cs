@@ -14,13 +14,20 @@ namespace TrabalhoElvis2.Controllers
         }
 
         // === LISTAGEM COM FILTRO ===
-        public IActionResult Index(string tipo = "Proprietario")
+        public IActionResult Index(string tipo = "Proprietario", string termoBusca = "")
         {
             ViewBag.TipoAtual = tipo;
-            var condominos = _context.Condominos
-                .Where(c => c.Tipo == tipo)
-                .ToList();
-
+            var query = _context.Condominos.Where(c => c.Tipo == tipo);
+            if (!string.IsNullOrEmpty(termoBusca))
+            {
+                termoBusca = termoBusca.ToLower();
+                query = query.Where(c =>
+                    (c.NomeCompleto != null && c.NomeCompleto.ToLower().Contains(termoBusca)) ||
+                    (c.CPF != null && c.CPF.ToLower().Contains(termoBusca)) ||
+                    (c.Email != null && c.Email.ToLower().Contains(termoBusca))
+                );
+            }
+            var condominos = query.ToList();
             ViewBag.Imoveis = _context.Imoveis.ToList(); // puxa imóveis pro modal
             return View(condominos);
         }

@@ -23,6 +23,10 @@ namespace TrabalhoElvis2.Controllers
         [HttpGet]
         public async Task<IActionResult> Administrador(string filtro = "Todos")
         {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            if (usuarioId == null)
+                return RedirectToAction("Login", "Usuario");
+
             var boletos = _context.Boletos
                 .Include(b => b.Contrato)
                     .ThenInclude(c => c.Imovel)

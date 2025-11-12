@@ -136,4 +136,17 @@ else
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Reabre o modal de cadastro apenas se o formulário de cadastro foi submetido e houver erro
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const isCadastro = urlParams.get("cadastro") === "1";
+            const hasErrors = document.querySelectorAll(".text-danger").length > 0;
+            if (isCadastro && hasErrors) {
+                const modal = new bootstrap.Modal(document.getElementById("modalCadastro"));
+                modal.show();
+            }
+        });
+    </script>
 }

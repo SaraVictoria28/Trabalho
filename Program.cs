@@ -48,6 +48,13 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Adiciona instrução de rota para garantir acesso por /Condomino
+app.MapControllerRoute(
+    name: "condomino",
+    pattern: "Condomino/{action=Index}/{id?}",
+    defaults: new { controller = "Condomino" }
+);
+
 // 6️⃣ Define a rota padrão
 app.MapControllerRoute(
     name: "default",

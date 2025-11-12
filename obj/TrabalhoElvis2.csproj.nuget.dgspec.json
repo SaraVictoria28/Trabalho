@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj": {}
+    "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj": {
+    "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
+        "projectUniqueName": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
         "projectName": "TrabalhoElvis2",
-        "projectPath": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
-        "packagesPath": "C:\\Users\\sara0\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\obj\\",
+        "projectPath": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
+        "packagesPath": "C:\\Users\\429438624\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sara0\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\429438624\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -37,8 +37,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -88,7 +87,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

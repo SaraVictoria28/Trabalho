@@ -21,7 +21,7 @@
     <!-- Cards de resumo -->
     <div class="row g-3 mb-4">
         <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3">
+            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Proprietario" style="cursor:pointer;">
                 <div class="d-flex align-items-center">
                     <div class="icon bg-primary-subtle text-primary me-3">
                         <i class="fa-solid fa-user-tie"></i>
@@ -35,7 +35,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3">
+            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Locatario" style="cursor:pointer;">
                 <div class="d-flex align-items-center">
                     <div class="icon bg-success-subtle text-success me-3">
                         <i class="fa-solid fa-key"></i>
@@ -49,7 +49,7 @@
         </div>
 
         <div class="col-md-4 col-sm-6">
-            <div class="card resumo shadow-sm border-0 p-3">
+            <div class="card resumo shadow-sm border-0 p-3 resumo-card" data-tipo="Funcionario" style="cursor:pointer;">
                 <div class="d-flex align-items-center">
                     <div class="icon bg-warning-subtle text-warning me-3">
                         <i class="fa-solid fa-briefcase"></i>
@@ -64,19 +64,16 @@
     </div>
 
     <!-- Barra de busca -->
-    <div class="card border-0 shadow-sm p-3 mb-4">
-        <div class="d-flex flex-wrap align-items-center justify-content-between">
-            <div class="search-box flex-grow-1 me-2 mb-2 mb-md-0">
-                <input type="text" class="form-control" placeholder="Buscar por nome, tipo ou CPF...">
-            </div>
-            <select class="form-select w-auto">
-                <option>Todos os Tipos</option>
-                <option>Proprietário</option>
-                <option>Locatário</option>
-                <option>Funcionário</option>
-            </select>
+    <form method="get" asp-action="Index" class="d-flex flex-wrap align-items-center justify-content-between mb-4">
+        <div class="search-box flex-grow-1 me-2 mb-2 mb-md-0">
+            <input type="text" name="termoBusca" class="form-control" placeholder="Buscar por nome, tipo ou CPF..." value="@(ViewContext.HttpContext.Request.Query["termoBusca"].ToString())" />
         </div>
-    </div>
+        <select name="tipo" class="form-select w-auto" onchange="this.form.submit()">
+            <option value="Proprietario" selected="@(tipoAtual == "Proprietario")">Proprietário</option>
+            <option value="Locatario" selected="@(tipoAtual == "Locatario")">Locatário</option>
+            <option value="Funcionario" selected="@(tipoAtual == "Funcionario")">Funcionário</option>
+        </select>
+    </form>
 
     <!-- Lista -->
     <div class="card border-0 shadow-sm p-3">
@@ -165,3 +162,14 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.resumo-card').forEach(function(card) {
+            card.addEventListener('click', function() {
+                var tipo = card.getAttribute('data-tipo');
+                window.location.href = '/Condomino?tipo=' + tipo;
+            });
+        });
+    </script>
+}

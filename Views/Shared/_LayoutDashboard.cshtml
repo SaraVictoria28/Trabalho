@@ -140,27 +140,6 @@
             border-color: #333;
             color: #f87171;
         }
-
-        /* ======== RESPONSIVO ======== */
-        @@media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-260px);
-                position: fixed;
-                padding-top: 60px;
-                z-index: 1040;
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                z-index: 1040;
-            }
-
-            .content {
-                margin-left: 0;
-                padding: 20px;
-            }
-        }
     </style>
 </head>
 
@@ -191,7 +170,7 @@
                     Pessoas</a>
                 <a asp-controller="Contrato" asp-action="Index" class="nav-link"><i
                         class="fa-solid fa-file-contract"></i> Contratos</a>
-                <a asp-controller="Financeiro" asp-action="Administrador" class="nav-link"><i
+                <a asp-controller="Financeiro" asp-action="Index" class="nav-link"><i
                         class="fa-solid fa-sack-dollar"></i> Financeiro</a>
                 <a asp-controller="Vistorias" asp-action="Index" class="nav-link"><i
                         class="fa-solid fa-clipboard-check"></i> Vistorias</a>

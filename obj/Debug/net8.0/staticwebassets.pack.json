@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\TrabalhoElvis2.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\wwwroot\\css\\dashboard.css",
+      "PackagePath": "staticwebassets\\css\\dashboard.css"
+    },
+    {
       "Id": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\wwwroot\\css\\imoveis.css",
       "PackagePath": "staticwebassets\\css\\imoveis.css"
     },
@@ -247,6 +251,14 @@
     {
       "Id": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
+    },
+    {
+      "Id": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\wwwroot\\qrcodes\\qrcode_1.png",
+      "PackagePath": "staticwebassets\\qrcodes\\qrcode_1.png"
+    },
+    {
+      "Id": "C:\\Users\\429438624\\Documents\\Projeto\\Trabalho\\wwwroot\\qrcodes\\qrcode_4.png",
+      "PackagePath": "staticwebassets\\qrcodes\\qrcode_4.png"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.TrabalhoElvis2.Microsoft.AspNetCore.StaticWebAssets.props",

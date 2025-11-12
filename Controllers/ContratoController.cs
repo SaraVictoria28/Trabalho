@@ -16,7 +16,7 @@ namespace TrabalhoElvis2.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string termoBusca, string statusFiltro)
         {
             var tipo = HttpContext.Session.GetString("TipoUsuario");
             if (tipo != "Administrador")
@@ -25,16 +25,34 @@ namespace TrabalhoElvis2.Controllers
                 return RedirectToAction("Login", "Usuario");
             }
 
-            var contratos = _context.Contratos
+            var query = _context.Contratos
                 .Include(c => c.Imovel)
                 .Include(c => c.Condomino)
-                .ToList();
+                .AsQueryable();
 
+            if (!string.IsNullOrEmpty(termoBusca))
+            {
+                termoBusca = termoBusca.ToLower();
+                query = query.Where(c =>
+                    (c.NumeroContrato != null && c.NumeroContrato.ToLower().Contains(termoBusca)) ||
+                    (c.Imovel != null && c.Imovel.Codigo != null && c.Imovel.Codigo.ToLower().Contains(termoBusca)) ||
+                    (c.Condomino != null && c.Condomino.NomeCompleto != null && c.Condomino.NomeCompleto.ToLower().Contains(termoBusca))
+                );
+            }
+
+            if (!string.IsNullOrEmpty(statusFiltro) && statusFiltro != "Todos")
+            {
+                query = query.Where(c => c.Status == statusFiltro);
+            }
+
+            var contratos = query.ToList();
             ViewBag.Imoveis = _context.Imoveis.ToList();
-            ViewBag.Condominos = _context.Condominos.ToList();
-
+            ViewBag.Condominos = _context.Condominos.Where(c => c.Tipo == "Proprietario" || c.Tipo == "Locatario").ToList();
+            ViewBag.TermoBusca = termoBusca;
+            ViewBag.StatusFiltro = statusFiltro;
             return View(contratos);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Cadastrar(Contrato contrato)
