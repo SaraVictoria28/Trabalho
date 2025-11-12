@@ -14,7 +14,10 @@ builder.Services.AddDbContext<LoginContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoPadrao"))
 );
 
-// 3️⃣ Adiciona sessão
+// 3️⃣ Adiciona IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
+// 4️⃣ Adiciona sessão
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -22,7 +25,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// 4️⃣ Adiciona autenticação e autorização (caso use Identity futuramente)
+// 5️⃣ Adiciona autenticação e autorização (caso use Identity futuramente)
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 

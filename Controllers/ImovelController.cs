@@ -113,7 +113,7 @@ namespace TrabalhoElvis2.Controllers
             await _ctx.SaveChangesAsync(); // Salva as alterações no banco de dados
 
             // Mensagem de sucesso
-            TempData["MensagemSucesso"] = "Imóvel cadastrado com sucesso!";
+            TempData["MensagemImovelSucesso"] = "Imóvel cadastrado com sucesso!";
 
             return RedirectToAction(nameof(Index)); // Redireciona para a página de listagem de imóveis
         }
@@ -205,7 +205,7 @@ namespace TrabalhoElvis2.Controllers
             _ctx.Imoveis.Update(imovel);
             await _ctx.SaveChangesAsync(); // Salva as alterações no banco
 
-            TempData["MensagemSucesso"] = "Imóvel atualizado com sucesso!";
+            TempData["MensagemImovelSucesso"] = "Imóvel atualizado com sucesso!";
 
             return RedirectToAction(nameof(Index)); // Redireciona para a página de listagem de imóveis
         }
@@ -226,7 +226,7 @@ namespace TrabalhoElvis2.Controllers
             await _ctx.SaveChangesAsync(); // Salva as alterações no banco
 
             // Mensagem de sucesso
-            TempData["MensagemSucesso"] = "Imóvel excluído com sucesso!";
+            TempData["MensagemImovelSucesso"] = "Imóvel excluído com sucesso!";
 
             return RedirectToAction(nameof(Index)); // Redireciona para a página de listagem de imóveis
         }

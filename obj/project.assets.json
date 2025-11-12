@@ -4794,11 +4794,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projelto\\Trabalho\\TrabalhoElvis2.csproj",
+      "projectUniqueName": "c:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
       "projectName": "TrabalhoElvis2",
-      "projectPath": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projelto\\Trabalho\\TrabalhoElvis2.csproj",
+      "projectPath": "c:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\TrabalhoElvis2.csproj",
       "packagesPath": "C:\\Users\\sara0\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sara0\\OneDrive\\Documentos\\Projelto\\Trabalho\\obj\\",
+      "outputPath": "c:\\Users\\sara0\\OneDrive\\Documentos\\Projeto\\Trabalho\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\sara0\\AppData\\Roaming\\NuGet\\NuGet.Config"

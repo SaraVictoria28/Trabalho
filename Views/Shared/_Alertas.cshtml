@@ -1,0 +1,18 @@
+@{
+    string? sucesso = TempData["MensagemImovelSucesso"] as string ??
+                      TempData["MensagemContratoSucesso"] as string ??
+                      TempData["MensagemFinanceiroSucesso"] as string;
+
+    string? erro = TempData["MensagemImovelErro"] as string ??
+                   TempData["MensagemContratoErro"] as string ??
+                   TempData["MensagemFinanceiroErro"] as string;
+}
+
+@if (!string.IsNullOrEmpty(sucesso))
+{
+    <div class="alert alert-success">@sucesso</div>
+}
+@if (!string.IsNullOrEmpty(erro))
+{
+    <div class="alert alert-danger">@erro</div>
+}

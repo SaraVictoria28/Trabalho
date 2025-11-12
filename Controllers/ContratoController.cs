@@ -1,62 +1,72 @@
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
-    using TrabalhoElvis2.Context;
-    using TrabalhoElvis2.Models;
-    using Trabalho.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TrabalhoElvis2.Context;
+using TrabalhoElvis2.Models;
+using Trabalho.Models;
+using System.Linq;
 
-    namespace TrabalhoElvis2.Controllers
+namespace TrabalhoElvis2.Controllers
+{
+    public class ContratoController : Controller
     {
-        public class ContratoController : Controller
+        private readonly LoginContext _context;
+
+        public ContratoController(LoginContext context)
         {
-            private readonly LoginContext _context;
+            _context = context;
+        }
 
-            public ContratoController(LoginContext context)
+        public IActionResult Index()
+        {
+            var tipo = HttpContext.Session.GetString("TipoUsuario");
+            if (tipo != "Administrador")
             {
-                _context = context;
+                TempData["MensagemContratoErro"] = "Acesso restrito a administradores.";
+                return RedirectToAction("Login", "Usuario");
             }
 
-            public IActionResult Index()
+            var contratos = _context.Contratos
+                .Include(c => c.Imovel)
+                .Include(c => c.Condomino)
+                .ToList();
+
+            ViewBag.Imoveis = _context.Imoveis.ToList();
+            ViewBag.Condominos = _context.Condominos.ToList();
+
+            return View(contratos);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Cadastrar(Contrato contrato)
+        {
+            try
             {
-                var tipo = HttpContext.Session.GetString("TipoUsuario");
-                if (tipo != "Administrador")
+                if (!ModelState.IsValid)
                 {
-                    TempData["MensagemErro"] = "Acesso restrito a administradores.";
-                    return RedirectToAction("Login", "Usuario");
+                    // Recolhe erros do ModelState e envia via TempData para aparecer no _Alertas
+                    var errors = string.Join(" | ", ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => string.IsNullOrWhiteSpace(e.ErrorMessage) ? e.Exception?.Message : e.ErrorMessage));
+
+                    TempData["MensagemContratoErro"] = string.IsNullOrWhiteSpace(errors)
+                        ? "Preencha todos os campos obrigatórios." : $"Dados inválidos: {errors}";
+
+                    // Redireciona para Index para que o modal seja fechado e a mensagem apareça
+                    return RedirectToAction(nameof(Index));
                 }
 
-                var contratos = _context.Contratos
-                    .Include(c => c.Imovel)
-                    .Include(c => c.Condomino)
-                    .ToList();
+                _context.Contratos.Add(contrato);
+                await _context.SaveChangesAsync();
 
-                ViewBag.Imoveis = _context.Imoveis.ToList();
-                ViewBag.Condominos = _context.Condominos.ToList();
-
-                return View(contratos);
+                TempData["MensagemContratoSucesso"] = "Contrato cadastrado com sucesso!";
+                return RedirectToAction(nameof(Index));
             }
-
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public IActionResult Cadastrar(Contrato contrato)
+            catch (Exception ex)
             {
-                // var tipo = HttpContext.Session.GetString("TipoUsuario");
-                // if (tipo != "Administrador")
-                // {
-                //     TempData["MensagemErro"] = "Acesso restrito a administradores.";
-                //     return RedirectToAction("Login", "Usuario");
-                // }
-
-                if (ModelState.IsValid)
-                {
-                    _context.Contratos.Add(contrato);
-                    _context.SaveChanges();
-
-                    TempData["MensagemSucesso"] = "Contrato cadastrado com sucesso!";
-                    return RedirectToAction("Index");
-                }
-
-                TempData["MensagemErro"] = "Erro ao cadastrar o contrato.";
-                return RedirectToAction("Index");
+                // Envia a mensagem real do erro para o usuário (útil em dev)
+                TempData["MensagemContratoErro"] = $"Erro ao cadastrar o contrato: {ex.Message}";
+                return RedirectToAction(nameof(Index));
             }
         }
     }
+}

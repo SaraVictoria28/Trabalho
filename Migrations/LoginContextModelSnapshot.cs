@@ -84,13 +84,8 @@ namespace TrabalhoElvis2.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-<<<<<<< HEAD
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-=======
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
->>>>>>> 61ea956 (commit)
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(10,2)");
@@ -335,11 +330,7 @@ namespace TrabalhoElvis2.Migrations
             modelBuilder.Entity("TrabalhoElvis2.Models.Boleto", b =>
                 {
                     b.HasOne("Trabalho.Models.Contrato", "Contrato")
-<<<<<<< HEAD
                         .WithMany("Boletos")
-=======
-                        .WithMany()
->>>>>>> 61ea956 (commit)
                         .HasForeignKey("ContratoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -1,162 +1,380 @@
 @model IEnumerable<TrabalhoElvis2.Models.Boleto>
+<partial name="_Alertas" />
 
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
     ViewData["Title"] = "Financeiro - Administrador";
+    var tipoUsuario = Context.Session.GetString("TipoUsuario");
+    bool isAdmin = tipoUsuario == "Administrador";
 }
 
-
-<div class="container-fluid px-4">
-    <h2 class="mt-4 fw-bold text-primary">Financeiro - Administrador</h2>
-    <p class="text-muted mb-4">Controle completo do sistema financeiro</p>
+<div class="container px-4">
+    <h2 class="mt-4 fw-bold text-primary">
+        <i class="fa-solid fa-sack-dollar me-2"></i>Financeiro - @(isAdmin ? "Administrador" : "Síndico")
+    </h2>
+    <p class="text-muted mb-4">@(isAdmin ? "Controle completo do sistema financeiro" : "Acompanhamento financeiro do condomínio")</p>
 
     @if (TempData["MensagemSucesso"] != null)
     {
-        <div class="alert alert-success">@TempData["MensagemSucesso"]</div>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-check-circle me-2"></i>@TempData["MensagemSucesso"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["MensagemErro"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-exclamation-circle me-2"></i>@TempData["MensagemErro"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     }
 
-    <!-- ===== CARDS DE RESUMO ===== -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Receita Prevista</p>
-                    <h4>R$ @ViewBag.ReceitaPrevista.ToString("N2")</h4>
+    <!-- ====== CARDS DE RESUMO (apenas admin) ====== -->
+    @if (isAdmin)
+    {
+        <div class="row mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <p class="text-muted mb-1"><i class="fa-solid fa-money-bill me-1"></i>Receita Prevista</p>
+                        <h4 class="text-primary">R$ @ViewBag.ReceitaPrevista.ToString("N2")</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <p class="text-muted mb-1"><i class="fa-solid fa-check-circle me-1"></i>Receita Recebida</p>
+                        <h4 class="text-success">R$ @ViewBag.ReceitaRecebida.ToString("N2")</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <p class="text-muted mb-1"><i class="fa-solid fa-warning me-1"></i>Inadimplência</p>
+                        <h4 class="text-danger">R$ @ViewBag.Inadimplencia.ToString("N2")</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card shadow-sm border-0">
+                    <div class="card-body">
+                        <p class="text-muted mb-1"><i class="fa-solid fa-building me-1"></i>Boletos</p>
+                        <h4>@Model.Count()</h4>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Receita Recebida</p>
-                    <h4 class="text-success">R$ @ViewBag.ReceitaRecebida.ToString("N2")</h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Inadimplência</p>
-                    <h4 class="text-danger">R$ @ViewBag.Inadimplencia.ToString("N2")</h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <p class="text-muted mb-1">Taxa de Ocupação</p>
-                    <h4>87.5%</h4>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
 
-    <!-- ===== FILTRO ===== -->
-    <form method="get" asp-action="Administrador" class="row mb-3">
-        <div class="col-md-3">
-            <select name="filtro" class="form-select" onchange="this.form.submit()">
-                <option value="Todos">Todos</option>
-                <option value="Pago">Pago</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Vencido">Vencido</option>
-            </select>
+    <!-- ====== FILTROS ====== -->
+    <form method="get" asp-action="Administrador" class="mb-4">
+        <div class="row g-2">
+            <div class="col-md-3">
+                <select name="filtro" class="form-select" onchange="this.form.submit()">
+                    <option value="Todos" selected="@(ViewBag.FiltroStatus == "Todos")">Todos Status</option>
+                    <option value="Pago" selected="@(ViewBag.FiltroStatus == "Pago")">Pago</option>
+                    <option value="Pendente" selected="@(ViewBag.FiltroStatus == "Pendente")">Pendente</option>
+                    <option value="Vencido" selected="@(ViewBag.FiltroStatus == "Vencido")">Vencido</option>
+                </select>
+            </div>
+            <div class="col-md-9 d-flex gap-2">
+                <input type="text" name="termoBusca" class="form-control" placeholder="Buscar por imóvel ou morador..." value="@ViewBag.TermoBusca" />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="fa-solid fa-search"></i> Buscar
+                </button>
+            </div>
         </div>
     </form>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold">Boletos</h5>
-        <a asp-action="CriarBoleto" class="btn btn-primary">
-            <i class="fa-solid fa-plus"></i> Novo Boleto
-        </a>
-    </div>
+    <!-- ====== BOTÃO NOVO BOLETO (apenas admin) ====== -->
+    @if (isAdmin)
+    {
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold">Gerenciar Boletos</h5>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCriarBoleto">
+                <i class="fa-solid fa-plus me-2"></i>Novo Boleto
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3">
+            <h5 class="fw-bold">Boletos do Condomínio</h5>
+        </div>
+    }
 
+    <!-- ====== MODAL CRIAR BOLETO (apenas admin) ====== -->
+    @if (isAdmin)
+    {
+        <div class="modal fade" id="modalCriarBoleto" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Novo Boleto</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
 
-    <!-- ===== TABELA ===== -->
-    <div class="card shadow-sm">
+                    <form asp-controller="FinanceiroAdm" asp-action="CriarBoleto" method="post">
+                        <div class="modal-body">
+
+                            <!-- Campo de busca dinâmica -->
+                            <div class="mb-3 position-relative" style="z-index: 100;">
+                                <label for="numeroContrato" class="form-label fw-bold">Número do Contrato *</label>
+                                <input type="text" id="numeroContrato" class="form-control" placeholder="Digite o número do contrato..." autocomplete="off" required />
+                                <ul id="sugestoesContrato" class="list-group position-absolute w-100 shadow-sm" style="z-index:1; display:none; max-height:220px; overflow-y:auto; top:100%;"></ul>
+                                <input type="hidden" id="ContratoId" name="contratoId" />
+                                <small class="text-danger" id="erroContrato" style="display:none;">Selecione um contrato válido</small>
+                            </div>
+
+                            <!-- Informações automáticas -->
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Locatário</label>
+                                    <input type="text" id="Locatario" class="form-control" readonly style="background-color: #f5f5f5;" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Imóvel</label>
+                                    <input type="text" id="Imovel" class="form-control" readonly style="background-color: #f5f5f5;" />
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Valor (R$) *</label>
+                                    <input type="number" step="0.01" id="Valor" name="valor" class="form-control" placeholder="0.00" required />
+                                    <small class="text-danger" id="erroValor" style="display:none;">Valor deve ser maior que zero</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Data de Vencimento *</label>
+                                    <input type="date" id="Vencimento" name="vencimento" class="form-control" required />
+                                    <small class="text-danger" id="erroData" style="display:none;">Data não pode ser no passado</small>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnCriarBoleto">
+                                <i class="fa-solid fa-check me-2"></i>Criar Boleto
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- ====== TABELA DE BOLETOS ====== -->
+    <div class="card shadow-sm border-0">
         <div class="card-body">
-            <h5 class="fw-bold mb-3">Boletos</h5>
-
-            <table class="table align-middle table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>Imóvel</th>
-                        <th>Morador</th>
-                        <th>Vencimento</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                        <th>QR Code</th>
-                        <th>Comprovante</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var b in Model)
-                    {
-                        <tr>
-                            <td>@b.Contrato?.Imovel?.Codigo</td>
-                            <td>@b.Contrato?.Condomino?.NomeCompleto</td>
-                            <td>@b.Vencimento.ToString("dd/MM/yyyy")</td>
-                            <td>R$ @b.Valor.ToString("N2")</td>
-
-                            <td>
-                                @if (b.Status == "Pago")
+            @if (Model.Count() == 0)
+            {
+                <div class="text-center py-5">
+                    <i class="fa-solid fa-inbox fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Nenhum boleto encontrado</p>
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Imóvel</th>
+                                <th>Morador</th>
+                                <th>Vencimento</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>QR Code</th>
+                                @if (isAdmin)
                                 {
-                                    <span class="badge bg-success">Pago</span>
+                                    <th>Ações</th>
                                 }
-                                else if (b.Status == "Pendente")
-                                {
-                                    <span class="badge bg-warning text-dark">Pendente</span>
-                                }
-                                else
-                                {
-                                    <span class="badge bg-danger">Vencido</span>
-                                }
-                            </td>
-
-                            <td>
-                                @if (!string.IsNullOrEmpty(b.QrCodePix))
-                                {
-                                    <img src="@b.QrCodePix" width="60" />
-                                }
-                                else
-                                {
-                                    <form asp-action="GerarQrCode" method="post">
-                                        <input type="hidden" name="id" value="@b.Id" />
-                                        <button type="submit" class="btn btn-sm btn-outline-primary">Gerar QR</button>
-                                    </form>
-                                }
-                            </td>
-
-                            <td>
-                                @if (!string.IsNullOrEmpty(b.ComprovantePagamento))
-                                {
-                                    <a href="@b.ComprovantePagamento" target="_blank" class="btn btn-sm btn-outline-secondary">
-                                        Ver
-                                    </a>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">Nenhum</span>
-                                }
-                            </td>
-
-                            <td>
-                                @if (b.Status == "Pendente" && !string.IsNullOrEmpty(b.ComprovantePagamento))
-                                {
-                                    <form asp-action="ConfirmarPagamento" method="post">
-                                        <input type="hidden" name="id" value="@b.Id" />
-                                        <button type="submit" class="btn btn-sm btn-success">Confirmar</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">-</span>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var b in Model)
+                            {
+                                <tr>
+                                    <td><strong>@b.Contrato?.Imovel?.Codigo</strong></td>
+                                    <td>@b.Contrato?.Condomino?.NomeCompleto</td>
+                                    <td>@b.Vencimento.ToString("dd/MM/yyyy")</td>
+                                    <td class="fw-bold">R$ @b.Valor.ToString("N2")</td>
+                                    <td>
+                                        @if (b.Status == "Pago")
+                                        {
+                                            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Pago</span>
+                                        }
+                                        else if (b.Status == "Pendente")
+                                        {
+                                            <span class="badge bg-warning text-dark"><i class="fa-solid fa-clock me-1"></i>Pendente</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger"><i class="fa-solid fa-exclamation me-1"></i>Vencido</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(b.QrCodePix))
+                                        {
+                                            <a href="@b.QrCodePix" target="_blank" class="text-primary" title="Ver QR Code">
+                                                <i class="fa-solid fa-qrcode fa-lg"></i>
+                                            </a>
+                                        }
+                                        else if (isAdmin)
+                                        {
+                                            <form asp-controller="FinanceiroAdm" asp-action="GerarQrCodePublico" method="post" style="display:inline;">
+                                                <input type="hidden" name="id" value="@b.Id" />
+                                                <button type="submit" class="btn btn-sm btn-outline-primary" title="Gerar QR">
+                                                    <i class="fa-solid fa-sync"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">Sem QR</span>
+                                        }
+                                    </td>
+                                    @if (isAdmin)
+                                    {
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                @if (b.Status == "Pendente")
+                                                {
+                                                    <form asp-controller="FinanceiroAdm" asp-action="ConfirmarPagamento" method="post" style="display:inline;">
+                                                        <input type="hidden" name="id" value="@b.Id" />
+                                                        <button type="submit" class="btn btn-success" title="Confirmar Pagamento">
+                                                            <i class="fa-solid fa-check"></i>
+                                                        </button>
+                                                    </form>
+                                                }
+                                                <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalEditar@b.Id" title="Editar">
+                                                    <i class="fa-solid fa-pencil"></i>
+                                                </button>
+                                                <form asp-controller="FinanceiroAdm" asp-action="ExcluirBoleto" method="post" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este boleto?');">
+                                                    <input type="hidden" name="id" value="@b.Id" />
+                                                    <button type="submit" class="btn btn-outline-danger" title="Excluir">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
         </div>
     </div>
 </div>
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("numeroContrato");
+            const lista = document.getElementById("sugestoesContrato");
+            const hiddenId = document.getElementById("ContratoId");
+
+            async function buscarContratos(termo) {
+                try {
+                    const resp = await fetch(`/FinanceiroAdm/SugerirContratos?termo=${encodeURIComponent(termo)}`);
+                    if (!resp.ok) throw new Error("Erro na resposta do servidor");
+                    return await resp.json();
+                } catch (e) {
+                    console.error("Erro ao buscar contratos:", e);
+                    return [];
+                }
+            }
+
+            function preencherCampos(c) {
+                if (!c) return;
+                input.value = c.numeroContrato || "";
+                hiddenId.value = c.id || "";
+                document.getElementById("Valor").value = c.valorMensal != null ? Number(c.valorMensal).toFixed(2) : "";
+                document.getElementById("Locatario").value = c.locatario || "";
+                document.getElementById("Imovel").value = c.imovel || "";
+                document.getElementById("erroContrato").style.display = "none";
+
+                const hoje = new Date();
+                const venc = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 10);
+                document.getElementById("Vencimento").value = venc.toISOString().split("T")[0];
+                lista.style.display = "none";
+            }
+
+            input.addEventListener("input", async () => {
+                const termo = input.value.trim();
+                lista.innerHTML = "";
+                lista.style.display = "none";
+
+                if (termo.length < 2) return;
+                const contratos = await buscarContratos(termo);
+                if (!contratos || contratos.length === 0) return;
+
+                contratos.forEach(c => {
+                    const li = document.createElement("li");
+                    li.className = "list-group-item list-group-item-action";
+                    const valorFormatado = c.valorFormatado || (c.valorMensal != null ? `R$ ${Number(c.valorMensal).toFixed(2)}` : "Valor não informado");
+                    li.innerHTML = `<strong>${c.numeroContrato}</strong><br><small>${c.locatario} — ${c.imovel} — ${valorFormatado}</small>`;
+                    li.onclick = () => preencherCampos(c);
+                    lista.appendChild(li);
+                });
+
+                lista.style.display = "block";
+            });
+
+            input.addEventListener("keydown", async (e) => {
+                if (e.key === "Enter" || e.key === "Tab") {
+                    e.preventDefault();
+                    const termo = input.value.trim();
+                    if (!termo) return;
+
+                    const contratos = await buscarContratos(termo);
+                    if (!contratos || contratos.length === 0) {
+                        document.getElementById("erroContrato").style.display = "block";
+                        return;
+                    }
+
+                    const contrato = contratos.find(c => (c.numeroContrato || "").toLowerCase() === termo.toLowerCase()) || contratos[0];
+                    preencherCampos(contrato);
+                }
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!lista.contains(e.target) && e.target !== input) {
+                    lista.style.display = "none";
+                }
+            });
+
+            // Validações no submit
+            document.getElementById("btnCriarBoleto")?.addEventListener("click", function(e) {
+                const contratoId = document.getElementById("ContratoId").value;
+                const valor = parseFloat(document.getElementById("Valor").value);
+                const vencimento = document.getElementById("Vencimento").value;
+
+                if (!contratoId) {
+                    e.preventDefault();
+                    document.getElementById("erroContrato").style.display = "block";
+                    return false;
+                }
+                if (valor <= 0) {
+                    e.preventDefault();
+                    document.getElementById("erroValor").style.display = "block";
+                    return false;
+                }
+                if (!vencimento) {
+                    e.preventDefault();
+                    document.getElementById("erroData").style.display = "block";
+                    return false;
+                }
+            });
+        });
+    </script>
+}

@@ -1,99 +1,109 @@
-/* ESTILO GERAL*/
+/* ======== ESTILO BASE ======== */
 body {
     background-color: #f5f7fb;
-    font-family: "Inter", sans-serif;
+    font-family: "Inter", "Poppins", sans-serif;
+    color: #1e293b;
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 1150px;
 }
 
-/*    CABEÇALHO DA PÁGINA */
+/* ======== CABEÇALHO ======== */
 h3 {
     font-weight: 700;
     color: #1e293b;
+    margin-bottom: 0.4rem;
 }
 
 p.subtitle {
     color: #6b7280;
     font-size: 0.95rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.8rem;
 }
 
-   /* BOTÃO "NOVO IMÓVEL" */
-
+/* ======== BOTÃO "NOVO IMÓVEL" ======== */
 .btn-primary {
     background-color: #0061f2;
     border: none;
-    border-radius: 10px;
-    padding: 8px 16px;
+    border-radius: 12px;
+    padding: 9px 18px;
     font-weight: 500;
-    transition: all 0.2s ease;
+    letter-spacing: 0.2px;
+    transition: all 0.25s ease;
+    box-shadow: 0 3px 8px rgba(0, 97, 242, 0.15);
 }
 
 .btn-primary:hover {
     background-color: #004ecb;
     transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 97, 242, 0.25);
 }
 
-/* =============================
-   BUSCA E FILTROS
-============================= */
-input.form-control, select.form-select {
+/* ======== BUSCA E FILTROS ======== */
+input.form-control,
+select.form-select {
     border-radius: 10px;
     border: 1px solid #d1d5db;
     box-shadow: none;
     font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-input.form-control:focus, select.form-select:focus {
+input.form-control:focus,
+select.form-select:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
-/* =============================
-   LISTA DE IMÓVEIS (CARDS)
-============================= */
+/* ======== LISTA DE IMÓVEIS ======== */
 .list-group-item {
     background-color: #fff;
-    border-radius: 16px;
-    border: none;
-    padding: 24px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    padding: 20px 28px;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1rem;
 }
 
 .list-group-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
 }
 
 .list-group-item h5 {
     color: #111827;
     font-weight: 600;
+    margin-bottom: 0.4rem;
 }
 
 .list-group-item p {
     margin: 0;
 }
 
-/* Ícones e detalhes */
+/* ÍCONES E DETALHES */
 .list-group-item i {
     color: #2563eb;
+    font-size: 1rem;
+    vertical-align: middle;
+    margin-right: 5px;
 }
 
 .text-muted i {
     color: #9ca3af;
 }
 
-/* =============================
-   STATUS DO IMÓVEL
-============================= */
+/* ======== STATUS DO IMÓVEL ======== */
 .badge {
     font-size: 0.9rem;
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 6px 14px;
     font-weight: 500;
+    min-width: 90px;
+    text-align: center;
+    letter-spacing: 0.2px;
 }
 
 .bg-dark {
@@ -106,39 +116,57 @@ input.form-control:focus, select.form-select:focus {
     color: #111827 !important;
 }
 
-/* =============================
-   PREÇO DO ALUGUEL
-============================= */
+/* ======== PREÇO DO ALUGUEL ======== */
 .text-success {
     color: #16a34a !important;
+    font-weight: 600;
 }
 
-/* =============================
-   AÇÕES (EDITAR/EXCLUIR)
-============================= */
-.btn-outline-primary, .btn-outline-danger {
-    border-radius: 8px;
+/* ======== BOTÕES DE AÇÃO ======== */
+.btn-outline-primary,
+.btn-outline-danger {
+    border-radius: 10px;
     font-size: 0.9rem;
-    padding: 4px 10px;
-    transition: all 0.2s ease;
+    padding: 6px 12px;
+    transition: all 0.25s ease;
+    border-width: 1.5px;
 }
 
+.btn-outline-primary {
+    color: #2563eb;
+    border-color: #2563eb;
+}
 .btn-outline-primary:hover {
     background-color: #2563eb;
     color: #fff;
 }
 
+.btn-outline-danger {
+    color: #dc2626;
+    border-color: #dc2626;
+}
 .btn-outline-danger:hover {
     background-color: #dc2626;
     color: #fff;
 }
 
-/* =============================
-   RESPONSIVIDADE
-============================= */
+/* ======== ÍCONES DE DETALHES ======== */
+.details i {
+    color: #64748b;
+    margin-right: 4px;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 992px) {
+    .list-group-item {
+        padding: 18px;
+    }
+}
+
 @media (max-width: 768px) {
     .list-group-item {
         padding: 16px;
+        border-radius: 14px;
     }
 
     .d-flex.flex-wrap {
@@ -154,18 +182,43 @@ input.form-control:focus, select.form-select:focus {
 
     .btn-primary {
         width: 100%;
+        font-size: 0.95rem;
+    }
+
+    .badge {
+        margin-top: 6px;
     }
 }
-/*   REMOVER SETAS DOS CAMPOS NUMBER */
 
-/* Remove setas no Chrome, Edge e Safari */
+@media (max-width: 576px) {
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .list-group-item {
+        padding: 14px;
+    }
+
+    .list-group-item h5 {
+        font-size: 1rem;
+    }
+
+    .text-success {
+        font-size: 0.95rem;
+    }
+
+    .badge {
+        font-size: 0.8rem;
+    }
+}
+
+/* ======== REMOVER SETAS DOS CAMPOS NUMBER ======== */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Remove setas no Firefox */
 input[type=number] {
     -moz-appearance: textfield;
 }

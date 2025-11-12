@@ -1,4 +1,6 @@
 @model IEnumerable<TrabalhoElvis2.Models.Imovel>
+<partial name="_Alertas" />
+
 
 @{
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
@@ -40,20 +42,20 @@ else
 
         <!-- FILTROS de status E BUSCA -->
         <form method="get" asp-action="Index" class="d-flex flex-wrap gap-2 mb-4">
-        <div class="flex-grow-1">
-            <input type="text" name="termoBusca" class="form-control"
-                placeholder="Buscar por código, endereço ou proprietário..." value="@ViewBag.TermoBusca" />
-        </div>
-        <div>
-            <!-- AQUI ESTÁ O SELECT FUNCIONAL -->
-            <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
-                <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status
-                </option>
-                <option value="Ocupado" selected="@(ViewBag.StatusFiltro == "Ocupado")">Ocupado</option>
-                <option value="Vago" selected="@(ViewBag.StatusFiltro == "Vago")">Vago</option>
-            </select>
-        </div>
-    </form>
+            <div class="flex-grow-1">
+                <input type="text" name="termoBusca" class="form-control"
+                    placeholder="Buscar por código, endereço ou proprietário..." value="@ViewBag.TermoBusca" />
+            </div>
+            <div>
+                <!-- AQUI ESTÁ O SELECT FUNCIONAL -->
+                <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
+                    <option value="Todos os Status" selected="@(ViewBag.StatusFiltro == "Todos os Status")">Todos os Status
+                    </option>
+                    <option value="Ocupado" selected="@(ViewBag.StatusFiltro == "Ocupado")">Ocupado</option>
+                    <option value="Vago" selected="@(ViewBag.StatusFiltro == "Vago")">Vago</option>
+                </select>
+            </div>
+        </form>
 
         <!-- LISTA DE IMÓVEIS -->
         <div class="list-group">

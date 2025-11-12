@@ -1,57 +1,46 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TrabalhoElvis2.Models;
 using Trabalho.Models;
 
 namespace TrabalhoElvis2.Models
 {
     public class Boleto
     {
+        [Key]
         public int Id { get; set; }
-<<<<<<< HEAD
 
+        // Ligação com o contrato (que conecta ao imóvel e ao morador)
         [Required]
         public int ContratoId { get; set; }
 
-        // Navegação para o contrato (Imóvel + Morador vêm via Contrato)
         [ForeignKey(nameof(ContratoId))]
         public Contrato? Contrato { get; set; }
 
+        // Valor do boleto
         [Required(ErrorMessage = "O valor é obrigatório.")]
         [Column(TypeName = "decimal(10,2)")]
         public decimal Valor { get; set; }
 
+        // Data de vencimento
         [Required(ErrorMessage = "A data de vencimento é obrigatória.")]
         [DataType(DataType.Date)]
         public DateTime Vencimento { get; set; }
 
+        // Data do pagamento (quando o administrador confirma)
         [DataType(DataType.Date)]
         public DateTime? Pagamento { get; set; }
 
-        // "Pendente", "Pago", "Vencido", "Aguardando Confirmação"
+        // Status atual do boleto
         [Required, StringLength(30)]
-        public string Status { get; set; } = "Pendente";
+        public string Status { get; set; } = "Pendente"; 
+        // Valores possíveis: "Pendente", "Pago", "Vencido", "Aguardando Confirmação"
 
-        // Guardar caminho da imagem gerada do QR Code (ex: /qrcodes/qrcode_123.png)
+        // Caminho da imagem do QR Code (gerado automaticamente)
         public string? QrCodePix { get; set; }
 
-        // Comprovante enviado pelo morador (imagem)
+        // Caminho da imagem do comprovante de pagamento (enviado pelo morador)
         public string? ComprovantePagamento { get; set; }
-=======
-        public int ContratoId { get; set; }
-        public Contrato? Contrato { get; set; }
-
-        [Column(TypeName = "decimal(10,2)")]
-        public decimal Valor { get; set; }
-        public DateTime Vencimento { get; set; }
-        public DateTime? Pagamento { get; set; }
-
-        [Required]
-        [StringLength(20)]
-        public string Status { get; set; } = "Pendente"; // Pendente, Pago, Vencido
-
-        public string? QrCodePix { get; set; }              // Caminho do QR gerado
-        public string? ComprovantePagamento { get; set; }   // Caminho do comprovante enviado
->>>>>>> 61ea956 (commit)
     }
 }

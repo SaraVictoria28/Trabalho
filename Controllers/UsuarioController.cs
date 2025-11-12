@@ -38,59 +38,87 @@ namespace TrabalhoElvis2.Controllers
                 {
                     if (string.IsNullOrEmpty(usuario.NomeAdministrador))
                         usuario.NomeAdministrador = "Administrador do sistema";
+
+                    // Grava o usuário no banco
+                    _context.Usuarios.Add(usuario);
+                    _context.SaveChanges();
+
+                    // Armazena na sessão
+                    HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+                    HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador);
+                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+
+                    return RedirectToAction("Index", "Dashboard");
                 }
                 else if (usuario.TipoUsuario.Equals("Síndico", StringComparison.OrdinalIgnoreCase))
                 {
                     if (string.IsNullOrEmpty(usuario.NomeCompleto))
-                        usuario.NomeCompleto = "Síndico não identificado";
+                        throw new Exception("Nome completo obrigatório para Síndico");
 
-                    if (string.IsNullOrEmpty(usuario.Telefone))
-                        usuario.Telefone = "Não informado";
+                    // Cria registro em Condomino
+                    var condomino = new Condomino
+                    {
+                        NomeCompleto = usuario.NomeCompleto,
+                        Email = usuario.Email,
+                        Telefone = usuario.Telefone,
+                        Tipo = "Síndico",
+                        Ativo = true
+                    };
+                    _context.Condominos.Add(condomino);
+                    _context.SaveChanges();
+
+                    // Grava o usuário no banco
+                    usuario.NomeCompleto = condomino.NomeCompleto;
+                    _context.Usuarios.Add(usuario);
+                    _context.SaveChanges();
+
+                    // Armazena na sessão
+                    HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+                    HttpContext.Session.SetString("NomeUsuario", usuario.NomeCompleto);
+                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+                    HttpContext.Session.SetInt32("CondominoId", condomino.Id);
+
+                    return RedirectToAction("InterfaceSindico", "Usuario");
                 }
                 else if (usuario.TipoUsuario.Equals("Morador", StringComparison.OrdinalIgnoreCase))
                 {
                     if (string.IsNullOrEmpty(usuario.NomeCompleto))
-                        usuario.NomeCompleto = "Morador não identificado";
+                        throw new Exception("Nome completo obrigatório para Morador");
 
-                    if (string.IsNullOrEmpty(usuario.Apartamento))
-                        usuario.Apartamento = "N/D";
+                    // Cria registro em Condomino
+                    var condomino = new Condomino
+                    {
+                        NomeCompleto = usuario.NomeCompleto,
+                        Email = usuario.Email,
+                        Telefone = usuario.Telefone,
+                        Tipo = "Locatário",
+                        Ativo = true
+                    };
+                    _context.Condominos.Add(condomino);
+                    _context.SaveChanges();
+
+                    // Grava o usuário no banco
+                    usuario.NomeCompleto = condomino.NomeCompleto;
+                    _context.Usuarios.Add(usuario);
+                    _context.SaveChanges();
+
+                    // Armazena na sessão
+                    HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
+                    HttpContext.Session.SetString("NomeUsuario", usuario.NomeCompleto);
+                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+                    HttpContext.Session.SetInt32("CondominoId", condomino.Id);
+
+                    return RedirectToAction("InterfaceMorador", "Usuario");
                 }
                 else
                 {
-                    // Caso algum tipo inesperado chegue
-                    usuario.TipoUsuario = "Outro";
-                    usuario.NomeCompleto ??= "Usuário não identificado";
-                }
-
-                // === Grava o usuário no banco ===
-                _context.Usuarios.Add(usuario);
-                _context.SaveChanges();
-
-                // === Armazena na sessão ===
-                HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
-                HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador ?? usuario.NomeCompleto);
-                HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
-
-                // === Redireciona conforme o tipo ===
-                switch (usuario.TipoUsuario)
-                {
-                    case "Administrador":
-                        return RedirectToAction("Index", "Dashboard"); // Dashboard do Admin
-
-                    case "Síndico":
-                        return RedirectToAction("InterfaceSindico", "Usuario"); // Dashboard do Síndico
-
-                    case "Morador":
-                        return RedirectToAction("InterfaceMorador", "Usuario"); // Dashboard do Morador
-
-                    default:
-                        return RedirectToAction("Login", "Usuario");
+                    throw new Exception("Tipo de usuário inválido");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Erro ao salvar: {ex.Message}");
-                ModelState.AddModelError("", "Erro ao salvar no banco de dados.");
+                ModelState.AddModelError("", $"Erro ao salvar: {ex.Message}");
             }
 
             return View(usuario);

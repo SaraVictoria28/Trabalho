@@ -19,6 +19,61 @@ namespace TrabalhoElvis2.Controllers
             _env = env;
         }
 
+        // ========== INDEX - MORADOR ==========
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            if (usuarioId == null)
+                return RedirectToAction("Login", "Usuario");
+
+            // Busca os contratos do morador
+            var contratos = await _context.Contratos
+                .Include(c => c.Boletos)
+                .Include(c => c.Imovel)
+                .Include(c => c.Condomino)
+                .Where(c => c.CondominoId == usuarioId)
+                .ToListAsync();
+
+            // Busca todos os boletos do morador
+            var boletos = contratos
+                .SelectMany(c => c.Boletos)
+                .OrderByDescending(b => b.Vencimento)
+                .ToList();
+
+            // Atualiza status automaticamente
+            foreach (var b in boletos)
+            {
+                if (b.Status == "Pendente" && b.Vencimento < DateTime.Today)
+                    b.Status = "Vencido";
+            }
+            await _context.SaveChangesAsync();
+
+            return View("Index", boletos);
+        }
+
+        // ========== OBTER CHAVE PIX ==========
+        [HttpGet]
+        public async Task<IActionResult> ObterChavePix()
+        {
+            try
+            {
+                var condominio = await _context.Condominios.FirstOrDefaultAsync();
+                if (condominio == null)
+                    return Json(new { sucesso = false, mensagem = "Condomínio não encontrado" });
+
+                var chavePix = condominio.Cnpj ?? "N/A";
+                // Remove formatação da chave PIX
+                chavePix = System.Text.RegularExpressions.Regex.Replace(chavePix, @"[^\d@.]", "");
+
+                return Json(new { sucesso = true, chave = chavePix });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { sucesso = false, mensagem = ex.Message });
+            }
+        }
+
         // ========== ADMINISTRADOR ==========
         [HttpGet]
         public async Task<IActionResult> Administrador(string filtro = "Todos")

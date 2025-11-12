@@ -1,0 +1,258 @@
+@model IEnumerable<TrabalhoElvis2.Models.Boleto>
+
+@{
+    Layout = "~/Views/Shared/_LayoutMorador.cshtml";
+    ViewData["Title"] = "Meus Boletos";
+}
+
+@section Styles {
+    <style>
+        .card-boleto {
+            border-left: 4px solid #007bff;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card-boleto:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .badge-status {
+            font-size: 0.85rem;
+            padding: 0.4rem 0.8rem;
+        }
+        .status-pendente {
+            background-color: #ffc107;
+        }
+        .status-pago {
+            background-color: #28a745;
+        }
+        .status-vencido {
+            background-color: #dc3545;
+        }
+        .pix-container {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        .chave-pix {
+            font-family: monospace;
+            background-color: white;
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            word-break: break-all;
+            border: 1px solid #dee2e6;
+        }
+        .btn-copiar {
+            font-size: 0.9rem;
+        }
+        .toast-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+    </style>
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="text-primary mb-0">
+                <i class="fa-solid fa-file-invoice-dollar me-2"></i>Meus Boletos
+            </h2>
+            <p class="text-muted mt-2">Visualize seus boletos e chave PIX para pagamento</p>
+        </div>
+    </div>
+
+    <!-- ====== CHAVE PIX ====== -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card border-info shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fa-solid fa-key text-info me-2"></i>Chave PIX
+                    </h5>
+                    <p class="text-muted mb-3">Use a chave PIX abaixo para realizar o pagamento:</p>
+                    
+                    <div class="pix-container">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="chave-pix flex-grow-1" id="chavePix">
+                                <span class="spinner-border spinner-border-sm me-2" role="status">
+                                    <span class="visually-hidden">Carregando...</span>
+                                </span>
+                                Carregando chave PIX...
+                            </div>
+                            <button class="btn btn-primary btn-copiar ms-2" id="btnCopiarPix" onclick="copiarPix()">
+                                <i class="fa-solid fa-copy me-1"></i>Copiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== LISTA DE BOLETOS ====== -->
+    <div class="row">
+        <div class="col-12">
+            <h5 class="fw-bold mb-3">
+                <i class="fa-solid fa-list me-2"></i>Seus Boletos
+            </h5>
+
+            @if (Model.Any())
+            {
+                <div class="row g-3">
+                    @foreach (var boleto in Model)
+                    {
+                        var statusBadgeClass = boleto.Status == "Pendente" ? "status-pendente" :
+                                               boleto.Status == "Pago" ? "status-pago" :
+                                               boleto.Status == "Vencido" ? "status-vencido" : "bg-secondary";
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="card card-boleto shadow-sm h-100">
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Header com Status -->
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div>
+                                            <h6 class="card-subtitle text-muted">Boleto #@boleto.Id</h6>
+                                            <small class="text-muted">Contrato: @(boleto.Contrato?.NumeroContrato ?? "N/A")</small>
+                                        </div>
+                                        <span class="badge @statusBadgeClass badge-status">@boleto.Status</span>
+                                    </div>
+
+                                    <!-- Valor -->
+                                    <div class="mb-3">
+                                        <small class="text-muted d-block">Valor</small>
+                                        <h5 class="text-primary fw-bold mb-0">R$ @boleto.Valor.ToString("N2")</h5>
+                                    </div>
+
+                                    <!-- Datas -->
+                                    <div class="mb-3">
+                                        <small class="text-muted d-block">
+                                            <i class="fa-solid fa-calendar me-1"></i>Vencimento: 
+                                            <strong>@boleto.Vencimento.ToString("dd/MM/yyyy")</strong>
+                                        </small>
+                                        @if (boleto.Pagamento.HasValue)
+                                        {
+                                            <small class="text-success d-block mt-1">
+                                                <i class="fa-solid fa-check-circle me-1"></i>Pagamento: 
+                                                <strong>@boleto.Pagamento.Value.ToString("dd/MM/yyyy")</strong>
+                                            </small>
+                                        }
+                                    </div>
+
+                                    <!-- QR Code (se gerado) -->
+                                    @if (!string.IsNullOrEmpty(boleto.QrCodePix) && boleto.Status != "Pago")
+                                    {
+                                        <div class="text-center mb-3">
+                                            <img src="@boleto.QrCodePix" alt="QR Code PIX" class="img-fluid" style="max-width: 150px;">
+                                            <p class="small text-muted mt-2">Aponte sua câmera para pagar</p>
+                                        </div>
+                                    }
+
+                                    <!-- Ações -->
+                                    <div class="mt-auto pt-3 border-top">
+                                        @if (boleto.Status == "Pendente" || boleto.Status == "Vencido")
+                                        {
+                                            <button class="btn btn-success btn-sm w-100" onclick="pagarComPix(@boleto.Id)">
+                                                <i class="fa-solid fa-money-bill-wave me-1"></i>Pagar com PIX
+                                            </button>
+                                        }
+                                        else if (boleto.Status == "Pago")
+                                        {
+                                            <div class="alert alert-success alert-sm mb-0 py-2 text-center">
+                                                <i class="fa-solid fa-check-circle me-1"></i>Pagamento confirmado
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info text-center py-4">
+                    <i class="fa-solid fa-inbox fa-2x mb-3 d-block text-info"></i>
+                    <strong>Nenhum boleto encontrado</strong>
+                    <p class="text-muted mt-2">Você não possui boletos pendentes no momento.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Toast de Notificação -->
+<div id="toastNotification" class="toast-notification" style="display: none;">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <strong class="me-auto" id="toastTitle"></strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="toastBody"></div>
+    </div>
+</div>
+
+<script>
+    // Carregar chave PIX ao iniciar
+    document.addEventListener('DOMContentLoaded', function () {
+        carregarChavePix();
+    });
+
+    function carregarChavePix() {
+        fetch('/Financeiro/ObterChavePix')
+            .then(response => response.json())
+            .then(data => {
+                const chavePix = document.getElementById('chavePix');
+                if (data.sucesso) {
+                    chavePix.innerHTML = data.chave;
+                    document.getElementById('btnCopiarPix').disabled = false;
+                } else {
+                    chavePix.innerHTML = '<span class="text-danger">Erro ao carregar chave PIX</span>';
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                document.getElementById('chavePix').innerHTML = '<span class="text-danger">Erro na conexão</span>';
+            });
+    }
+
+    function copiarPix() {
+        const chavePix = document.getElementById('chavePix').innerText;
+        
+        navigator.clipboard.writeText(chavePix).then(function () {
+            mostrarNotificacao('Sucesso!', 'Chave PIX copiada para a área de transferência!', 'success');
+        }).catch(function (err) {
+            console.error('Erro ao copiar:', err);
+            mostrarNotificacao('Erro', 'Não foi possível copiar a chave PIX', 'danger');
+        });
+    }
+
+    function pagarComPix(boletoId) {
+        mostrarNotificacao('Informação', 'Abra seu app de banco e utilize a chave PIX acima para pagar este boleto.', 'info');
+    }
+
+    function mostrarNotificacao(titulo, mensagem, tipo) {
+        const toast = document.getElementById('toastNotification');
+        const toastTitle = document.getElementById('toastTitle');
+        const toastBody = document.getElementById('toastBody');
+        
+        toastTitle.textContent = titulo;
+        toastBody.textContent = mensagem;
+        
+        // Adicionar classe de cor apropriada
+        const toastElement = toast.querySelector('.toast');
+        toastElement.classList.remove('bg-success', 'bg-danger', 'bg-info');
+        if (tipo === 'success') toastElement.classList.add('bg-success', 'text-white');
+        else if (tipo === 'danger') toastElement.classList.add('bg-danger', 'text-white');
+        else if (tipo === 'info') toastElement.classList.add('bg-info', 'text-white');
+        
+        toast.style.display = 'block';
+        
+        // Auto-ocultar após 3 segundos
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+</script>

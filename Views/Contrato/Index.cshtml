@@ -1,65 +1,200 @@
 @model IEnumerable<Trabalho.Models.Contrato>
+<partial name="_Alertas" />
+
 @{
     ViewData["Title"] = "Contratos de Aluguel";
     Layout = "~/Views/Shared/_LayoutDashboard.cshtml";
 }
 
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    
+    <style>
+        .card-contrato {
+            border-left: 4px solid #0d6efd;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 0;
+            background-color: #fff;
+        }
+        .card-contrato:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .badge-status-ativo {
+            background-color: #28a745;
+        }
+        .badge-status-encerrado {
+            background-color: #dc3545;
+        }
+        .badge-status-pendente {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .periodo-tag {
+            background-color: #e7f3ff;
+            border-left: 3px solid #0d6efd;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+    </style>
+}
 
-<div class="container mt-4">
-    <h2>Contratos de Aluguel</h2>
-    <p class="text-muted">Gestão de contratos e locações</p>
-
-    <div class="d-flex justify-content-end mb-3">
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#novoContratoModal">
+<div class="container mt-4 mb-5">
+    <!-- Cabeçalho -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h3 class="fw-bold text-dark mb-1">Contratos de Aluguel</h3>
+            <p class="text-muted mb-0">Gestão de contratos e locações do condomínio</p>
+        </div>
+        <!-- Botão que abre o modal de cadastro -->
+        <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal"
+            data-bs-target="#novoContratoModal">
             <i class="bi bi-plus-lg"></i> Novo Contrato
         </button>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Número</th>
-                <th>Imóvel</th>
-                <th>Locatário</th>
-                <th>Período</th>
-                <th>Valor</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
+    <!-- FILTROS de status E BUSCA -->
+    <form method="get" asp-action="Index" class="d-flex flex-wrap gap-2 mb-4">
+        <div class="flex-grow-1">
+            <input type="text" name="termoBusca" class="form-control"
+                placeholder="Buscar por número, imóvel ou locatário..." value="@ViewBag.TermoBusca" />
+        </div>
+        <div>
+            <select name="statusFiltro" class="form-select" onchange="this.form.submit()">
+                <option value="Todos">Todos os Status</option>
+                <option value="Ativo" selected="@(ViewBag.StatusFiltro == "Ativo")">Ativo</option>
+                <option value="Encerrado" selected="@(ViewBag.StatusFiltro == "Encerrado")">Encerrado</option>
+                <option value="Pendente" selected="@(ViewBag.StatusFiltro == "Pendente")">Pendente</option>
+            </select>
+        </div>
+    </form>
+
+    <!-- LISTA DE CONTRATOS -->
+    <div class="list-group">
+        @if (Model.Any())
+        {
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>@item.NumeroContrato</td>
-                    <td>@item.Imovel</td>
-                    <td>@item.Condomino</td>
-                    <td>@item.DataInicio.ToShortDateString() até @item.DataTermino.ToShortDateString()</td>
-                    <td>R$ @item.Valor.ToString("N2")</td>
-                    <td>@item.Status</td>
-                </tr>
+                var statusBadgeClass = item.Status == "Ativo" ? "badge-status-ativo" :
+                                       item.Status == "Encerrado" ? "badge-status-encerrado" :
+                                       "badge-status-pendente";
+
+                <div class="list-group-item card-contrato shadow-sm rounded-3 mb-3 p-4">
+                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                        <div class="d-flex align-items-center gap-3">
+                            <i class="bi bi-file-earmark-text text-primary fs-3"></i>
+                            <div>
+                                <h5 class="mb-1 fw-semibold">@item.NumeroContrato</h5>
+                                <p class="text-muted mb-1">
+                                    <i class="bi bi-house-fill"></i> 
+                                    <strong>@item.Imovel?.Codigo</strong> - @item.Imovel?.Tipo
+                                </p>
+                                <p class="text-muted mb-1">
+                                    <i class="bi bi-person-circle"></i> 
+                                    <strong>@item.Condomino?.NomeCompleto</strong>
+                                </p>
+                                <div class="periodo-tag mt-2">
+                                    <i class="bi bi-calendar-event"></i>
+                                    @item.DataInicio.ToString("dd/MM/yyyy") até @item.DataTermino.ToString("dd/MM/yyyy")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-end">
+                            <span class="badge rounded-pill px-3 py-2 fs-6 @statusBadgeClass">
+                                @item.Status
+                            </span>
+                            <p class="text-muted mt-3 mb-1">Valor Mensal</p>
+                            <h5 class="text-success fw-bold">
+                                R$ @item.Valor.ToString("N2")
+                            </h5>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 border-top pt-2 d-flex justify-content-between align-items-center">
+                        <div class="d-flex gap-2 small text-muted flex-wrap">
+                            <span>
+                                <i class="bi bi-square"></i>
+                                @(item.Imovel?.Metragem ?? 0) m²
+                            </span>
+                            <span>
+                                <i class="bi bi-door-open"></i>
+                                @(item.Imovel?.Quartos ?? 0) quartos
+                            </span>
+                            <span>
+                                <i class="bi bi-badge-wc"></i>
+                                @(item.Imovel?.Banheiros ?? 0) banheiros
+                            </span>
+                        </div>
+                        <div>
+                            <a asp-controller="Contrato" asp-action="Editar" asp-route-id="@item.Id"
+                                class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <form asp-action="Excluir" asp-route-id="@item.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        }
+        else
+        {
+            <div class="alert alert-info text-center py-5">
+                <i class="bi bi-inbox fa-2x mb-3 d-block"></i>
+                <strong>Nenhum contrato encontrado</strong>
+                <p class="text-muted mt-2">Comece adicionando um novo contrato.</p>
+            </div>
+        }
+    </div>
 </div>
 
 <!-- MODAL: Novo Contrato -->
 <div class="modal fade" id="novoContratoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Cadastrar Novo Contrato</h5>
+        <div class="modal-content p-4">
+            <div class="modal-header border-0 mb-3">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-file-earmark-plus text-primary me-2"></i>
+                    Cadastrar Novo Contrato
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form asp-action="Cadastrar" method="post">
+                <form asp-controller="Contrato" asp-action="Cadastrar" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <!-- Número e Status -->
                     <div class="row mb-3">
-                        <div class="col">
-                            <label>Número do Contrato</label>
-                            <input type="text" name="NumeroContrato" class="form-control" required />
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-file-earmark"></i> Número do Contrato <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" name="NumeroContrato" class="form-control" placeholder="CT-2024-001" required />
                         </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-tag"></i> Status
+                            </label>
+                            <select name="Status" class="form-select">
+                                <option value="Ativo">Ativo</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Encerrado">Encerrado</option>
+                            </select>
+                        </div>
+                    </div>
 
-                        <div class="col">
-                            <label>Imóvel</label>
+                    <!-- Imóvel e Condômino -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-house-fill"></i> Imóvel <span class="text-danger">*</span>
+                            </label>
                             <select name="ImovelId" class="form-select" required>
                                 <option value="">Selecione um imóvel...</option>
                                 @foreach (var imovel in ViewBag.Imoveis)
@@ -68,43 +203,60 @@
                                 }
                             </select>
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col">
-                            <label>Condômino</label>
-                            <select name="CondominoId" class="form-select">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-person-circle"></i> Condômino <span class="text-danger">*</span>
+                            </label>
+                            <select name="CondominoId" class="form-select" required>
                                 <option value="">Selecione um condômino...</option>
                                 @foreach (var c in ViewBag.Condominos)
                                 {
-                                    <option value="@c.Id">@c.NomeCompleto - @c.Email</option>
+                                    <option value="@c.Id">@c.NomeCompleto</option>
                                 }
                             </select>
                         </div>
-
-                        <div class="col">
-                            <label>Valor do Aluguel</label>
-                            <input type="number" step="0.01" name="Valor" class="form-control" />
-                        </div>
                     </div>
 
+                    <!-- Valor do Aluguel -->
                     <div class="row mb-3">
                         <div class="col">
-                            <label>Data de Início</label>
-                            <input type="date" name="DataInicio" class="form-control" />
-                        </div>
-                        <div class="col">
-                            <label>Data de Término</label>
-                            <input type="date" name="DataTermino" class="form-control" />
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-currency-dollar"></i> Valor Mensal <span class="text-danger">*</span>
+                            </label>
+                            <input type="number" step="0.01" name="Valor" class="form-control" placeholder="0.00" required />
                         </div>
                     </div>
 
-                    <div class="text-end">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                    <!-- Datas -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-calendar-event"></i> Data de Início <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" name="DataInicio" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                <i class="bi bi-calendar-x"></i> Data de Término <span class="text-danger">*</span>
+                            </label>
+                            <input type="date" name="DataTermino" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-1"></i>Cadastrar
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+}
