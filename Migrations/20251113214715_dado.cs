@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TrabalhoElvis2.Migrations
 {
     /// <inheritdoc />
-    public partial class CriacaoTabelaBoleto : Migration
+    public partial class dado : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -1,41 +1,321 @@
 @{
     Layout = "~/Views/Shared/_LayoutMorador.cshtml";
+    var condomino = ViewBag.Condomino;
+    var imoveis = ViewBag.Imoveis ?? new List<object>();
+    var boletos = ViewBag.Boletos ?? new List<object>();
 }
 
-<div class="container mt-4">
-    <h2 class="text-primary mb-4">
-        <i class="fa-solid fa-user"></i> Minha Área - Bem-vindo, @ViewBag.NomeUsuario!
+<style>
+    .dashboard-header {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+    }
+
+    .dashboard-header h2 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .dashboard-header p {
+        margin: 0.5rem 0 0 0;
+        opacity: 0.95;
+    }
+
+    .card-custom {
+        border: none;
+        border-radius: 14px;
+        background: white;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        padding: 1.5rem;
+    }
+
+    .card-custom:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-custom.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .card-icon.green {
+        background: #dcfce7;
+        color: #22c55e;
+    }
+
+    .card-icon.blue {
+        background: #dbeafe;
+        color: #3b82f6;
+    }
+
+    .card-icon.orange {
+        background: #fed7aa;
+        color: #f97316;
+    }
+
+    .card-icon.red {
+        background: #fecaca;
+        color: #ef4444;
+    }
+
+    .card-custom h5 {
+        color: #1f2937;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .card-custom .card-subtitle {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-custom .card-value {
+        color: #22c55e;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .card-custom .badge {
+        border-radius: 8px;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .badge.status-paid {
+        background: #dcfce7;
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+    .badge.status-pending {
+        background: #fef3c7;
+        color: #f97316;
+        font-weight: 600;
+    }
+
+    .badge.status-overdue {
+        background: #fecaca;
+        color: #ef4444;
+        font-weight: 600;
+    }
+
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .imovel-card {
+        border-left: 4px solid #22c55e;
+    }
+
+    .table-responsive-custom {
+        overflow-x: auto;
+    }
+
+    .table-custom {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .table-custom thead {
+        background: #f3f4f6;
+    }
+
+    .table-custom th {
+        font-weight: 700;
+        color: #374151;
+        border: none;
+        padding: 0.75rem;
+    }
+
+    .table-custom td {
+        border: none;
+        padding: 0.75rem;
+        color: #374151;
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .grid-container {
+            grid-template-columns: 1fr;
+        }
+
+        .card-custom {
+            padding: 1.25rem;
+        }
+    }
+</style>
+
+<div class="dashboard-header">
+    <h2>
+        <i class="bi bi-person-circle"></i> Bem-vindo, @ViewBag.NomeUsuario!
     </h2>
+    <p>Acompanhe seus imóveis, pagamentos e informações</p>
+</div>
 
-    <div class="row g-4">
-        <!-- Card: Meu Imóvel -->
-        <div class="col-md-12">
-            <div class="card shadow-sm p-3 border-primary">
-                <h5><i class="fa-solid fa-house"></i> Meu Imóvel</h5>
-                <p class="text-muted mb-2">Código: APT-101</p>
-                <p class="text-muted mb-2">Endereço: Rua das Flores, 123 - Apt 101</p>
-                <p class="text-success mb-0">Valor do Aluguel: R$ 1.800</p>
+<div class="grid-container">
+    <!-- Card: Meus Imóveis -->
+    @if (imoveis.Count > 0)
+    {
+        <div class="card-custom imovel-card">
+            <h5><i class="bi bi-houses"></i> Meus Imóveis</h5>
+            <p class="card-subtitle">Total de @imoveis.Count imóvel(is)</p>
+            <div style="margin-top: 1rem;">
+                @foreach (var imovel in imoveis)
+                {
+                    <div style="background: #f9fafb; padding: 0.75rem; border-radius: 8px; margin-bottom: 0.75rem; border-left: 3px solid #22c55e;">
+                        <p style="margin: 0 0 0.25rem 0; font-weight: 600; color: #1f2937;">@imovel.Codigo</p>
+                        <p style="margin: 0; font-size: 0.85rem; color: #6b7280;">@imovel.Endereco</p>
+                    </div>
+                }
             </div>
         </div>
+    }
 
-        <!-- Card: Contrato / Pagamentos / Avisos -->
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3 border-info">
-                <h6>Meu Contrato</h6>
-                <p>CT-2024-001<br/>Vence em 64 dias</p>
-            </div>
+    <!-- Card: Situação Financeira -->
+    <div class="card-custom">
+        <div class="card-icon green">
+            <i class="bi bi-graph-up"></i>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3 border-success">
-                <h6>Último Pagamento</h6>
-                <p>09/10/2025 - <span class="badge bg-success">Em dia</span></p>
+        <h5><i class="bi bi-currency-dollar"></i> Situação Financeira</h5>
+        <p class="card-subtitle">Resumo de pagamentos</p>
+        <div style="margin-top: 1rem;">
+            <div style="margin-bottom: 1rem;">
+                <p style="margin: 0; font-size: 0.85rem; color: #6b7280;">Total Geral</p>
+                <p style="margin: 0.25rem 0 0 0; font-weight: 700; font-size: 1.3rem; color: #1f2937;">R$ @ViewBag.ValorTotal.ToString("F2")</p>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm p-3 border-warning">
-                <h6>Avisos</h6>
-                <p>2 novos</p>
+            <hr style="margin: 0.75rem 0; border: none; border-top: 1px solid #e5e7eb;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                <div>
+                    <p style="margin: 0; font-size: 0.8rem; color: #6b7280;">Pagos</p>
+                    <p style="margin: 0.25rem 0 0 0; font-weight: 600; color: #22c55e;">R$ @ViewBag.ValorPago.ToString("F2")</p>
+                </div>
+                <div>
+                    <p style="margin: 0; font-size: 0.8rem; color: #6b7280;">Pendente</p>
+                    <p style="margin: 0.25rem 0 0 0; font-weight: 600; color: #f97316;">R$ @ViewBag.ValorPendente.ToString("F2")</p>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Card: Boletos -->
+    <div class="card-custom">
+        <div class="card-icon blue">
+            <i class="bi bi-file-earmark-text"></i>
+        </div>
+        <h5><i class="bi bi-receipt"></i> Boletos</h5>
+        <p class="card-subtitle">Status dos pagamentos</p>
+        <div style="margin-top: 1rem;">
+            <div style="margin-bottom: 0.75rem;">
+                <p style="margin: 0 0 0.25rem 0; font-size: 0.85rem; color: #6b7280;">Total de boletos</p>
+                <p style="margin: 0; color: #1f2937;"><span style="font-weight: 700; font-size: 1.2rem;">@ViewBag.TotalBoletos</span> boletos</p>
+            </div>
+            <hr style="margin: 0.75rem 0; border: none; border-top: 1px solid #e5e7eb;">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="badge status-paid">✓ Pagos: @ViewBag.BoletosPagos</span>
+                <span class="badge status-pending">⏳ Pendentes: @ViewBag.BoletosPendentes</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card: Ações Rápidas -->
+    <div class="card-custom">
+        <div class="card-icon orange">
+            <i class="bi bi-lightning"></i>
+        </div>
+        <h5><i class="bi bi-lightning"></i> Ações Rápidas</h5>
+        <p class="card-subtitle">Acesso direto</p>
+        <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+            <a href="/Financeiro" class="btn btn-sm" style="background: #dcfce7; color: #22c55e; font-weight: 600; border: none;">
+                <i class="bi bi-currency-dollar me-2"></i>Ver Meus Boletos
+            </a>
+            <a href="/Comunicacao" class="btn btn-sm" style="background: #dbeafe; color: #3b82f6; font-weight: 600; border: none;">
+                <i class="bi bi-bell me-2"></i>Comunicados
+            </a>
+        </div>
+    </div>
+
+    <!-- Card: Últimos Boletos -->
+    @if (boletos.Count > 0)
+    {
+        <div class="card-custom full-width">
+            <h5><i class="bi bi-list-check"></i> Últimos Boletos</h5>
+            <div class="table-responsive-custom">
+                <table class="table table-custom">
+                    <thead>
+                        <tr>
+                            <th>Vencimento</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var boleto in boletos.Take(5))
+                        {
+                            <tr>
+                                <td>@boleto.Vencimento.ToString("dd/MM/yyyy")</td>
+                                <td>R$ @boleto.Valor.ToString("F2")</td>
+                                <td>
+                                    @if (boleto.Status == "Pago")
+                                    {
+                                        <span class="badge status-paid">✓ Pago</span>
+                                    }
+                                    else if (boleto.Status == "Vencido")
+                                    {
+                                        <span class="badge status-overdue">⚠ Vencido</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge status-pending">⏳ Pendente</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/Financeiro" class="btn btn-xs" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background: #f3f4f6; color: #374151; border: none; border-radius: 4px;">Ver</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-custom full-width">
+            <p style="text-align: center; color: #6b7280; margin: 0;">
+                <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 0.5rem;"></i>
+                Nenhum boleto encontrado
+            </p>
+        </div>
+    }
 </div>

@@ -2,96 +2,259 @@
 
 @{
     ViewData["Title"] = "Cadastro - VizinhApp";
+    Layout = null;
 }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
-    body {
-        background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-        font-family: 'Poppins', sans-serif;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
 
-    .cadastro-container {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        width: 450px;
-        padding: 40px 30px;
-    }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 1rem;
+        }
 
-    .cadastro-container h3 {
-        color: #1565c0;
-        font-weight: 600;
-        text-align: center;
-        margin-bottom: 20px;
-    }
+        .cadastro-wrapper {
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    .form-control {
-        border-radius: 10px;
-        padding: 10px 12px;
-    }
+        .cadastro-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-    .btn-primary {
-        background-color: #1565c0;
-        border: none;
-        border-radius: 10px;
-        width: 100%;
-        padding: 10px;
-        margin-top: 15px;
-        font-weight: 600;
-    }
+        .cadastro-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
 
-    .btn-primary:hover {
-        background-color: #0d47a1;
-    }
+        .cadastro-header .logo {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
 
-    .btn-secondary {
-        border-radius: 10px;
-        margin-top: 10px;
-        width: 100%;
-    }
+        .cadastro-header h2 {
+            color: #212529;
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
 
-    .text-link {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 14px;
-    }
+        .cadastro-header p {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin: 0;
+        }
 
-    .text-link a {
-        color: #1565c0;
-        text-decoration: none;
-        font-weight: 600;
-    }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
 
-    .text-link a:hover {
-        text-decoration: underline;
-    }
+        .form-group label {
+            color: #212529;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
 
-    .campos-dinamicos {
-        margin-top: 20px;
-        padding: 15px;
-        background-color: #f5f9ff;
-        border-radius: 10px;
-        border-left: 4px solid #1565c0;
-    }
+        .form-control, .form-select {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
 
-    .hidden {
-        display: none !important;
-    }
-</style>
+        .form-control:focus, .form-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+        }
 
-<div class="cadastro-container">
-    <h3><i class="bi bi-building"></i> VizinhApp</h3>
-    <p class="text-center text-muted mb-4">Crie sua conta para acessar o sistema</p>
+        .form-control::placeholder {
+            color: #adb5bd;
+        }
 
-    <form asp-action="Cadastrar" asp-controller="Usuario" method="post" novalidate>
+        .btn-cadastro {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-cadastro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .btn-cadastro:active {
+            transform: translateY(0);
+        }
+
+        .campos-dinamicos {
+            margin-top: 1.25rem;
+            padding: 1rem;
+            background-color: #f8f9ff;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .campos-dinamicos h6 {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .form-footer p {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .text-danger {
+            color: #dc3545;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @@media (max-width: 576px) {
+            body {
+                padding: 1rem;
+            }
+
+            .cadastro-container {
+                padding: 2rem 1.5rem;
+            }
+
+            .cadastro-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .cadastro-header .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+
+            .form-group label {
+                font-size: 0.9rem;
+            }
+
+            .form-control, .form-select {
+                font-size: 0.9rem;
+                padding: 0.65rem 0.9rem;
+            }
+
+            .btn-cadastro {
+                padding: 0.75rem 0.9rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @@media (max-width: 360px) {
+            .cadastro-container {
+                padding: 1.5rem 1rem;
+            }
+
+            .cadastro-header h2 {
+                font-size: 1.3rem;
+            }
+
+            .cadastro-header .logo {
+                width: 55px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="cadastro-wrapper">
+    <div class="cadastro-container">
+        <div class="cadastro-header">
+            <div class="logo">
+                <i class="fa-solid fa-building"></i>
+            </div>
+            <h2>VizinhApp</h2>
+            <p>Crie sua conta para acessar o sistema</p>
+        </div>
+
+        <form asp-action="Cadastrar" asp-controller="Usuario" method="post">
         <!-- Campos Básicos (sempre visíveis) -->
         <div class="form-group mb-3">
             <label for="tipoUsuario" class="fw-bold">
@@ -180,45 +343,87 @@
         </div>
 
         <!-- Botão Submit -->
-        <button type="submit" class="btn btn-primary">
+        <button type="submit" class="btn btn-cadastro">
             <i class="bi bi-check-circle me-2"></i>Cadastrar
         </button>
 
-        <div class="text-link">
-            Já possui conta?
-            <a asp-action="Login" asp-controller="Usuario">Faça login aqui</a>
+        <div class="form-footer">
+            <p>Já possui conta? <a asp-action="Login" asp-controller="Usuario">Faça login aqui</a></p>
         </div>
-    </form>
+        </form>
+    </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const tipoSelect = document.getElementById('tipoUsuario');
-            const camposAdmin = document.getElementById('camposAdmin');
-            const camposSindico = document.getElementById('camposSindico');
-            const camposMorador = document.getElementById('camposMorador');
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tipoSelect = document.getElementById('tipoUsuario');
+        const camposAdmin = document.getElementById('camposAdmin');
+        const camposSindico = document.getElementById('camposSindico');
+        const camposMorador = document.getElementById('camposMorador');
 
-            function mostrarCampos() {
-                const tipo = tipoSelect.value;
+        const nomeSindicoInput = document.getElementById('nomeSindico');
+        const nomeMoradorInput = document.getElementById('nomeMorador');
 
-                // Limpa todas as classes hidden
-                camposAdmin.classList.add('hidden');
-                camposSindico.classList.add('hidden');
-                camposMorador.classList.add('hidden');
+        function limparValidacoesDinamicas() {
+            if (nomeSindicoInput) {
+                nomeSindicoInput.removeAttribute('required');
+            }
+            if (nomeMoradorInput) {
+                nomeMoradorInput.removeAttribute('required');
+            }
+        }
 
-                // Mostra conforme o tipo
-                if (tipo === 'Administrador') {
-                    camposAdmin.classList.remove('hidden');
-                } else if (tipo === 'Síndico') {
-                    camposSindico.classList.remove('hidden');
-                } else if (tipo === 'Morador') {
-                    camposMorador.classList.remove('hidden');
-                }
+        function mostrarCampos() {
+            const tipo = tipoSelect.value;
+
+            // Limpa todas as classes hidden
+            camposAdmin.classList.add('hidden');
+            camposSindico.classList.add('hidden');
+            camposMorador.classList.add('hidden');
+
+            // Remove validações dinâmicas anteriores
+            limparValidacoesDinamicas();
+
+            // Desabilita todos os inputs dos blocos para evitar envio de campos ocultos
+            function disableInputs(container) {
+                Array.from(container.querySelectorAll('input, select, textarea')).forEach(i => i.setAttribute('disabled', 'disabled'));
+            }
+            function enableInputs(container) {
+                Array.from(container.querySelectorAll('input, select, textarea')).forEach(i => i.removeAttribute('disabled'));
             }
 
-            tipoSelect.addEventListener('change', mostrarCampos);
-        });
-    </script>
-}
+            disableInputs(camposAdmin);
+            disableInputs(camposSindico);
+            disableInputs(camposMorador);
+
+            // Mostra conforme o tipo e ajusta required e enabled
+            if (tipo === 'Administrador') {
+                camposAdmin.classList.remove('hidden');
+                enableInputs(camposAdmin);
+            } else if (tipo === 'Síndico') {
+                camposSindico.classList.remove('hidden');
+                if (nomeSindicoInput) {
+                    nomeSindicoInput.setAttribute('required', 'required');
+                }
+                enableInputs(camposSindico);
+            } else if (tipo === 'Morador') {
+                camposMorador.classList.remove('hidden');
+                if (nomeMoradorInput) {
+                    nomeMoradorInput.setAttribute('required', 'required');
+                }
+                enableInputs(camposMorador);
+            }
+        }
+
+        // Executa no carregamento para manter estado se houver postback
+        mostrarCampos();
+
+        tipoSelect.addEventListener('change', mostrarCampos);
+    });
+</script>
+</body>
+</html>

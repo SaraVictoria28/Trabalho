@@ -1,3 +1,31 @@
+/* ======= SIDEBAR RESPONSIVO ======= */
+.sidebar {
+    width: 260px;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow-y: auto;
+}
+
+.sidebar .nav-link {
+    color: #0d6efd !important;
+    text-decoration: none !important;
+    border-left: 3px solid transparent;
+    padding-left: 15px;
+    transition: all 0.2s ease;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: #0a58ca !important;
+    border-left-color: #0d6efd;
+    background-color: #f0f5ff;
+}
+
+.sidebar .nav-link i {
+    margin-right: 8px;
+}
+
 /* ======= PAINEL ADMIN ======= */
 .page-header {
     display: flex;
@@ -75,8 +103,32 @@
     background-color: #fff5e6;
 }
 
-/* ======= RESPONSIVIDADE ======= */
+/* ======= RESPONSIVIDADE DESKTOP ======= */
+@media (min-width: 1200px) {
+    .d-flex {
+        display: flex;
+        flex-direction: row;
+    }
+    
+    main {
+        flex: 1;
+        overflow-y: auto;
+        max-height: 100vh;
+    }
+    
+    .sidebar {
+        position: sticky;
+        top: 0;
+        flex-shrink: 0;
+    }
+}
+
+/* ======= RESPONSIVIDADE TABLET ======= */
 @media (max-width: 992px) {
+    .sidebar {
+        width: 220px;
+    }
+    
     .page-header h2 {
         font-size: 1.5rem;
     }
@@ -90,7 +142,83 @@
     }
 }
 
+/* ======= RESPONSIVIDADE MOBILE (PORTRAIT) ======= */
 @media (max-width: 768px) {
+    body, html {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .d-flex {
+        display: flex !important;
+        flex-direction: column !important;
+        min-height: 100vh;
+    }
+    
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 1rem;
+        order: 1;
+        border-bottom: 1px solid #e9ecef;
+        max-height: auto;
+    }
+    
+    .sidebar .nav {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .sidebar .nav-item {
+        flex: 1 1 auto;
+        min-width: 140px;
+    }
+    
+    .sidebar .nav-link {
+        padding: 0.5rem !important;
+        text-align: center;
+        font-size: 0.85rem;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+    
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+        border-left: none;
+        border-bottom-color: #0d6efd;
+    }
+    
+    .sidebar .nav-link i {
+        display: block;
+        margin-right: 0;
+        margin-bottom: 0.25rem;
+    }
+    
+    .sidebar .mt-auto {
+        margin-top: 0.5rem !important;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .sidebar p {
+        margin-bottom: 0 !important;
+        font-size: 0.8rem;
+    }
+    
+    .sidebar form {
+        flex: 1 1 auto;
+    }
+    
+    main {
+        order: 2;
+        padding: 1rem !important;
+        flex: 1;
+        overflow-y: auto;
+    }
+
     .page-header {
         align-items: center;
         text-align: center;
@@ -104,30 +232,92 @@
     .stat-card {
         width: 100%;
         margin: 0 auto;
+        padding: 1.5rem 1rem;
     }
 
     .icon-circle {
-        width: 60px;
-        height: 60px;
-        font-size: 1.6rem;
+        width: 55px;
+        height: 55px;
+        font-size: 1.5rem;
     }
-}
-
-@media (max-width: 480px) {
+    
     .page-header h2 {
         font-size: 1.3rem;
     }
+}
+
+/* ======= RESPONSIVIDADE SMALL MOBILE ======= */
+@media (max-width: 576px) {
+    .sidebar {
+        padding: 0.75rem;
+    }
+    
+    .sidebar .nav-item {
+        min-width: 100px;
+        margin-bottom: 0.25rem !important;
+    }
+    
+    .sidebar .nav-link {
+        padding: 0.4rem !important;
+        font-size: 0.75rem;
+    }
+    
+    .sidebar .nav-link i {
+        font-size: 0.9rem;
+    }
+    
+    .sidebar p {
+        font-size: 0.7rem !important;
+    }
+    
+    .sidebar .btn {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.5rem !important;
+    }
+    
+    main {
+        padding: 0.75rem !important;
+    }
+
+    .page-header h2 {
+        font-size: 1.1rem;
+    }
 
     .stat-card {
-        padding: 1.2rem;
+        padding: 1rem;
         border-radius: 12px;
     }
 
     .stat-card h3 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     .page-header p {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
+    }
+    
+    .row.g-4 {
+        gap: 0.75rem;
+    }
+}
+
+/* ======= RESPONSIVIDADE EXTRA SMALL ======= */
+@media (max-width: 360px) {
+    .sidebar {
+        padding: 0.5rem;
+    }
+    
+    .sidebar .nav-item {
+        min-width: 80px;
+        margin-bottom: 0.2rem !important;
+    }
+    
+    .sidebar .nav-link {
+        padding: 0.3rem !important;
+        font-size: 0.65rem;
+    }
+    
+    main {
+        padding: 0.5rem !important;
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 using TrabalhoElvis2.Context;
 using TrabalhoElvis2.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace TrabalhoElvis2.Controllers
 {
@@ -26,7 +27,15 @@ namespace TrabalhoElvis2.Controllers
         public IActionResult Cadastrar(Usuario usuario)
         {
             if (!ModelState.IsValid)
+            {
+                // Log dos erros
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Erro de ModelState: {error.ErrorMessage}");
+                }
                 return View(usuario);
+            }
 
             try
             {
@@ -37,7 +46,10 @@ namespace TrabalhoElvis2.Controllers
                 if (usuario.TipoUsuario.Equals("Administrador", StringComparison.OrdinalIgnoreCase))
                 {
                     if (string.IsNullOrEmpty(usuario.NomeAdministrador))
-                        usuario.NomeAdministrador = "Administrador do sistema";
+                    {
+                        Console.WriteLine("Erro: NomeAdministrador vazio");
+                        throw new Exception("Nome do administrador obrigatório");
+                    }
 
                     // Grava o usuário no banco
                     _context.Usuarios.Add(usuario);
@@ -46,14 +58,18 @@ namespace TrabalhoElvis2.Controllers
                     // Armazena na sessão
                     HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
                     HttpContext.Session.SetString("NomeUsuario", usuario.NomeAdministrador);
-                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+                    HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
 
                     return RedirectToAction("Index", "Dashboard");
                 }
                 else if (usuario.TipoUsuario.Equals("Síndico", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (string.IsNullOrEmpty(usuario.NomeCompleto))
-                        throw new Exception("Nome completo obrigatório para Síndico");
+                    if (string.IsNullOrWhiteSpace(usuario.NomeCompleto))
+                    {
+                        Console.WriteLine("Erro: NomeCompleto vazio para Síndico");
+                        ModelState.AddModelError(nameof(usuario.NomeCompleto), "Nome completo obrigatório para Síndico");
+                        return View(usuario);
+                    }
 
                     // Cria registro em Condomino
                     var condomino = new Condomino
@@ -75,15 +91,19 @@ namespace TrabalhoElvis2.Controllers
                     // Armazena na sessão
                     HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
                     HttpContext.Session.SetString("NomeUsuario", usuario.NomeCompleto);
-                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+                    HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
                     HttpContext.Session.SetInt32("CondominoId", condomino.Id);
 
                     return RedirectToAction("InterfaceSindico", "Usuario");
                 }
                 else if (usuario.TipoUsuario.Equals("Morador", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (string.IsNullOrEmpty(usuario.NomeCompleto))
-                        throw new Exception("Nome completo obrigatório para Morador");
+                    if (string.IsNullOrWhiteSpace(usuario.NomeCompleto))
+                    {
+                        Console.WriteLine("Erro: NomeCompleto vazio para Morador");
+                        ModelState.AddModelError(nameof(usuario.NomeCompleto), "Nome completo obrigatório para Morador");
+                        return View(usuario);
+                    }
 
                     // Cria registro em Condomino
                     var condomino = new Condomino
@@ -105,13 +125,14 @@ namespace TrabalhoElvis2.Controllers
                     // Armazena na sessão
                     HttpContext.Session.SetString("TipoUsuario", usuario.TipoUsuario);
                     HttpContext.Session.SetString("NomeUsuario", usuario.NomeCompleto);
-                    HttpContext.Session.SetInt32("UsuarioId", usuario.Id);
+                    HttpContext.Session.SetInt32("IdUsuario", usuario.Id);
                     HttpContext.Session.SetInt32("CondominoId", condomino.Id);
 
                     return RedirectToAction("InterfaceMorador", "Usuario");
                 }
                 else
                 {
+                    Console.WriteLine($"Erro: Tipo de usuário inválido: {usuario.TipoUsuario}");
                     throw new Exception("Tipo de usuário inválido");
                 }
             }
@@ -228,8 +249,46 @@ namespace TrabalhoElvis2.Controllers
                 return RedirectToAction("Login");
             }
 
-            ViewBag.NomeUsuario = HttpContext.Session.GetString("NomeUsuario");
-            ViewBag.IdUsuario = HttpContext.Session.GetInt32("IdUsuario");
+            var usuarioId = HttpContext.Session.GetInt32("IdUsuario");
+            var nomeUsuario = HttpContext.Session.GetString("NomeUsuario");
+
+            ViewBag.NomeUsuario = nomeUsuario;
+            ViewBag.IdUsuario = usuarioId;
+
+            // Buscar dados do morador (Condomino)
+            var condomino = _context.Condominios
+                .FirstOrDefault(c => c.Id == usuarioId);
+
+            if (condomino != null)
+            {
+                ViewBag.Condomino = condomino;
+            }
+
+            // Buscar imóvéis do morador
+            var imoveis = _context.Imoveis
+                .Where(i => i.CondominoId == usuarioId)
+                .ToList();
+
+            ViewBag.Imoveis = imoveis;
+
+            // Buscar boletos pendentes/em dia
+            var boletos = _context.Boletos
+                .Include(b => b.Contrato)
+                    .ThenInclude(c => c.Imovel)
+                .Where(b => b.Contrato.Imovel.CondominoId == usuarioId)
+                .OrderByDescending(b => b.Vencimento)
+                .ToList();
+
+            ViewBag.BoletosPendentes = boletos.Where(b => b.Status == "Pendente").ToList();
+            ViewBag.Boletos = boletos;
+
+            // Estatísticas
+            ViewBag.TotalBoletos = boletos.Count;
+            ViewBag.BoletosPagos = boletos.Count(b => b.Status == "Pago");
+            ViewBag.BoletosPendentes = boletos.Count(b => b.Status == "Pendente");
+            ViewBag.ValorTotal = boletos.Sum(b => b.Valor);
+            ViewBag.ValorPago = boletos.Where(b => b.Status == "Pago").Sum(b => b.Valor);
+            ViewBag.ValorPendente = boletos.Where(b => b.Status != "Pago").Sum(b => b.Valor);
 
             return View();
         }

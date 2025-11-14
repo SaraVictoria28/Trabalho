@@ -1,0 +1,54 @@
+@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Financeiro do Síndico";
+    Layout = "~/Views/Shared/_LayoutSindico.cshtml";
+}
+
+<h2 class="mb-4">Boletos do Condomínio</h2>
+
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Imóvel</th>
+                    <th>Morador</th>
+                    <th>Vencimento</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model)
+                {
+                    <tr>
+                        <td>@b.Imovel</td>
+                        <td>@b.Morador</td>
+                        <td>@b.Vencimento.ToShortDateString()</td>
+                        <td>
+                            @if (b.Status == "Pago")
+                            {
+                                <span class="badge bg-success">Pago</span>
+                            }
+                            else if (b.Status == "Pendente")
+                            {
+                                <span class="badge bg-warning">Pendente</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Vencido</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> Nenhum boleto cadastrado no condomínio.
+    </div>
+}

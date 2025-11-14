@@ -11,7 +11,7 @@ namespace TrabalhoElvis2.Models
         [Key]
         public int Id { get; set; }
 
-        // Ligação com o contrato (que conecta ao imóvel e ao morador)
+        // Ligação com o contrato
         [Required]
         public int ContratoId { get; set; }
 
@@ -34,13 +34,17 @@ namespace TrabalhoElvis2.Models
 
         // Status atual do boleto
         [Required, StringLength(30)]
-        public string Status { get; set; } = "Pendente"; 
-        // Valores possíveis: "Pendente", "Pago", "Vencido", "Aguardando Confirmação"
+        public string Status { get; set; } = "Pendente";
+        // "Pendente", "Pago", "Vencido", "Aguardando Confirmação"
 
-        // Caminho da imagem do QR Code (gerado automaticamente)
+        // QR Code armazenado
         public string? QrCodePix { get; set; }
 
-        // Caminho da imagem do comprovante de pagamento (enviado pelo morador)
+        // Caminho da imagem do comprovante de pagamento (morador)
         public string? ComprovantePagamento { get; set; }
+
+        // 🔥 CHAVE PIX personalizada — administrador cola ao criar o boleto
+        [StringLength(200)]
+        public string? ChavePix { get; set; }
     }
 }

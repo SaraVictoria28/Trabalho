@@ -23,7 +23,7 @@ namespace TrabalhoElvis2.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuarioId = HttpContext.Session.GetInt32("IdUsuario");
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 

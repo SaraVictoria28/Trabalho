@@ -17,127 +17,137 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = TrabalhoElvis2
 build_property.RootNamespace = TrabalhoElvis2
-build_property.ProjectDir = C:\Users\429438624\Documents\Projeto\Trabalho\
+build_property.ProjectDir = C:\Users\sara0\OneDrive\Documentos\Projeto\Trabalho\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\429438624\Documents\Projeto\Trabalho
+build_property.MSBuildProjectDirectory = C:\Users\sara0\OneDrive\Documentos\Projeto\Trabalho
 build_property._RazorSourceGeneratorDebug = 
+build_property.EffectiveAnalysisLevelStyle = 8.0
+build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Comunicacao/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Comunicacao/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tdW5pY2FjYW9cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Condominio/Cadastrar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Condominio/Cadastrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uZG9taW5pb1xDYWRhc3RyYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Condominio/Dashboard.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Condominio/Dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uZG9taW5pb1xEYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Condomino/Cadastrar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Condomino/Cadastrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uZG9taW5vXENhZGFzdHJhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Condomino/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Condomino/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29uZG9taW5vXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Contrato/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Contrato/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udHJhdG9cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Dashboard/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Dashboard/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Financeiro/Administrador.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/FinanceiroSindico/SindicoIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW5jZWlyb1NpbmRpY29cU2luZGljb0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Financeiro/Administrador.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW5jZWlyb1xBZG1pbmlzdHJhZG9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Financeiro/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Financeiro/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW5jZWlyb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Funcionario/Cadastrar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Financeiro/SindicoIndex.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmluYW5jZWlyb1xTaW5kaWNvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Funcionario/Cadastrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cQ2FkYXN0cmFyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Funcionario/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Funcionario/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRnVuY2lvbmFyaW9cSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Imovel/Cadastrar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Imovel/Cadastrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW1vdmVsXENhZGFzdHJhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Imovel/Editar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Imovel/Editar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW1vdmVsXEVkaXRhci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Imovel/Index.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Imovel/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW1vdmVsXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Imovel/_FormImovel.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Imovel/_FormImovel.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSW1vdmVsXF9Gb3JtSW1vdmVsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/Error.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_Alertas.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_Alertas.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BbGVydGFzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_LayoutDashboard.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_LayoutDashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXREYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_LayoutMorador.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_LayoutMorador.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRNb3JhZG9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_LayoutSindico.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_LayoutSindico.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXRTaW5kaWNvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Usuario/Cadastrar.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Usuario/Cadastrar.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xDYWRhc3RyYXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Usuario/InterfaceAdministrador.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Usuario/InterfaceAdministrador.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xJbnRlcmZhY2VBZG1pbmlzdHJhZG9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Usuario/InterfaceMorador.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Usuario/InterfaceMorador.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xJbnRlcmZhY2VNb3JhZG9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Usuario/InterfaceSindico.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Usuario/InterfaceSindico.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xJbnRlcmZhY2VTaW5kaWNvLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Usuario/Login.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Usuario/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXN1YXJpb1xMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/_ViewImports.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/_ViewStart.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/429438624/Documents/Projeto/Trabalho/Views/Shared/_Layout.cshtml]
+[C:/Users/sara0/OneDrive/Documentos/Projeto/Trabalho/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-6pdlqqfye9

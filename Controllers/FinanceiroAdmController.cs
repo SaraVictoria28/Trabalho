@@ -23,7 +23,7 @@ namespace TrabalhoElvis2.Controllers
         [HttpGet]
         public async Task<IActionResult> Administrador(string filtro = "Todos")
         {
-            var usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+            var usuarioId = HttpContext.Session.GetInt32("IdUsuario");
             if (usuarioId == null)
                 return RedirectToAction("Login", "Usuario");
 
@@ -48,9 +48,8 @@ namespace TrabalhoElvis2.Controllers
             return View("~/Views/Financeiro/Administrador.cshtml", await boletos.ToListAsync());
         }
 
-        // === CRIAR NOVO BOLETO (GERADO PELO ADMINISTRADOR) ===
         [HttpPost]
-        public async Task<IActionResult> CriarBoleto(int contratoId, decimal valor, DateTime vencimento)
+        public async Task<IActionResult> CriarBoleto(int contratoId, decimal valor, DateTime vencimento, string chavePix)
         {
             // Validações básicas
             if (contratoId <= 0)
@@ -71,6 +70,12 @@ namespace TrabalhoElvis2.Controllers
                 return RedirectToAction("Administrador");
             }
 
+            if (string.IsNullOrWhiteSpace(chavePix))
+            {
+                TempData["MensagemErro"] = "A chave PIX é obrigatória.";
+                return RedirectToAction("Administrador");
+            }
+
             var contrato = await _context.Contratos
                 .Include(c => c.Condomino)
                 .Include(c => c.Imovel)
@@ -84,31 +89,26 @@ namespace TrabalhoElvis2.Controllers
 
             try
             {
+                // Cria o boleto já com a chave pix personalizada
                 var boleto = new Boleto
                 {
                     ContratoId = contratoId,
                     Valor = valor,
                     Vencimento = vencimento,
-                    Status = "Pendente"
+                    Status = "Pendente",
+                    ChavePix = chavePix // SALVA A CHAVE PIX
                 };
 
                 _context.Boletos.Add(boleto);
                 await _context.SaveChangesAsync();
 
-                // 🔹 Gera o QR Code PIX automaticamente com CNPJ do condomínio
-                // Pega o primeiro condominio disponível (em produção, seria baseado no imóvel/condomínio)
-                var condominio = await _context.Condominios.FirstOrDefaultAsync();
-                string chavePix = condominio?.Cnpj ?? "vizinapp@pix.com";
-                
-                // Remove formatação do CNPJ se houver (00.000.000/0000-00 → 00000000000000)
-                chavePix = System.Text.RegularExpressions.Regex.Replace(chavePix, @"[^\d@.]", "");
-                
-                string payload = $"pix://{chavePix}?valor={valor}&nome={contrato.Condomino?.NomeCompleto ?? "Morador"}&imovel={contrato.Imovel?.Codigo ?? "Imóvel"}";
+                // 🔹 Gera QR code usando exatamente a chave que o administrador colou
+                string payload = $"pix://{chavePix}?valor={valor}&nome={contrato.Condomino?.NomeCompleto}";
 
-                using (var qrGen = new QRCoder.QRCodeGenerator())
+                using (var qrGen = new QRCodeGenerator())
                 {
-                    var data = qrGen.CreateQrCode(payload, QRCoder.QRCodeGenerator.ECCLevel.Q);
-                    using var qrCode = new QRCoder.QRCode(data);
+                    var data = qrGen.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+                    using var qrCode = new QRCode(data);
                     using var bitmap = qrCode.GetGraphic(20);
 
                     string path = Path.Combine(_env.WebRootPath, "qrcodes");
@@ -116,13 +116,13 @@ namespace TrabalhoElvis2.Controllers
                         Directory.CreateDirectory(path);
 
                     string filePath = Path.Combine(path, $"qrcode_{boleto.Id}.png");
-                    bitmap.Save(filePath, System.Drawing.Imaging.ImageFormat.Png);
+                    bitmap.Save(filePath, ImageFormat.Png);
 
                     boleto.QrCodePix = $"/qrcodes/qrcode_{boleto.Id}.png";
                     await _context.SaveChangesAsync();
                 }
 
-                TempData["MensagemSucesso"] = "Boleto gerado com sucesso! QR Code PIX gerado automaticamente.";
+                TempData["MensagemSucesso"] = "Boleto gerado com sucesso! QR Code PIX criado com a chave informada.";
                 return RedirectToAction("Administrador");
             }
             catch (Exception ex)

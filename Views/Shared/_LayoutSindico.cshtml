@@ -5,7 +5,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>@ViewData["Title"] - VizinhApp</title>
 
     <!-- Bootstrap CSS -->
@@ -19,6 +19,33 @@
 
     <!-- CSS do site -->
     <link rel="stylesheet" href="~/css/site.css" />
+    @RenderSection("Styles", required: false)
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .d-flex {
+            display: flex;
+            flex-direction: row;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+            width: 100%;
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="d-flex">
@@ -31,41 +58,41 @@
 
             <ul class="nav flex-column">
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Dashboard" asp-action="Index"><i class="bi bi-bar-chart"></i> Dashboard</a>
+                    <a class="nav-link" asp-controller="Usuario" asp-action="InterfaceSindico" title="Dashboard"><i class="bi bi-bar-chart"></i> <span class="d-lg-inline d-none">Dashboard</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Financeiro" asp-action="Index"><i class="bi bi-currency-dollar"></i> Financeiro</a>
+                    <a class="nav-link" asp-controller="FinanceiroSindico" asp-action="Index" title="Financeiro"><i class="bi bi-currency-dollar"></i> <span class="d-lg-inline d-none">Financeiro</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Vistoria" asp-action="Index"><i class="bi bi-clipboard-check"></i> Vistorias</a>
+                    <a class="nav-link" asp-controller="Vistoria" asp-action="Index" title="Vistorias"><i class="bi bi-clipboard-check"></i> <span class="d-lg-inline d-none">Vistorias</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Manutencao" asp-action="Index"><i class="bi bi-wrench-adjustable"></i> Manutenções</a>
+                    <a class="nav-link" asp-controller="Manutencao" asp-action="Index" title="Manutenções"><i class="bi bi-wrench-adjustable"></i> <span class="d-lg-inline d-none">Manutenções</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Comunicacao" asp-action="Index"><i class="bi bi-bell"></i> Comunicação</a>
+                    <a class="nav-link" asp-controller="Comunicacao" asp-action="Index" title="Comunicação"><i class="bi bi-bell"></i> <span class="d-lg-inline d-none">Comunicação</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Acesso" asp-action="Index"><i class="bi bi-shield-lock"></i> Controle de Acesso</a>
+                    <a class="nav-link" asp-controller="Acesso" asp-action="Index" title="Controle de Acesso"><i class="bi bi-shield-lock"></i> <span class="d-lg-inline d-none">Controle de Acesso</span></a>
                 </li>
                 <li class="nav-item mb-2">
-                    <a class="nav-link" asp-controller="Relatorios" asp-action="Index"><i class="bi bi-graph-up"></i> Relatórios</a>
+                    <a class="nav-link" asp-controller="Relatorios" asp-action="Index" title="Relatórios"><i class="bi bi-graph-up"></i> <span class="d-lg-inline d-none">Relatórios</span></a>
                 </li>
             </ul>
 
             <div class="mt-auto pt-3 border-top">
                 <p class="text-muted small mb-1">
-                    <i class="bi bi-person-badge"></i> @HttpContextAccessor.HttpContext.Session.GetString("NomeUsuario")<br/>
-                    <span class="text-secondary">Síndico</span>
+                    <i class="bi bi-person-badge"></i> <span class="d-lg-inline d-none">@HttpContextAccessor.HttpContext.Session.GetString("NomeUsuario")</span><br/>
+                    <span class="text-secondary d-lg-inline d-none">Síndico</span>
                 </p>
                 <form asp-controller="Usuario" asp-action="Logout" method="post">
-                    <button class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-box-arrow-right"></i> Sair</button>
+                    <button class="btn btn-outline-danger btn-sm w-100"><i class="bi bi-box-arrow-right"></i> <span class="d-lg-inline d-none">Sair</span></button>
                 </form>
             </div>
         </nav>
 
         <!-- Conteúdo principal -->
-        <main class="flex-fill p-4">
+        <main class="flex-fill">
             @RenderBody()
         </main>
     </div>
